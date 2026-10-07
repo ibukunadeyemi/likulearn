@@ -1,4 +1,4 @@
-/* Enrolment form — global because its markup is rendered client-side by src/scripts/enrol.ts. */
+/* Enrolment form: global because its markup is rendered client-side by src/scripts/enrol.ts. */
 
 /* `clip` rather than `hidden`: hidden would turn these into scroll containers and stop the
    form's action bar from sticking to the bottom of the viewport. */

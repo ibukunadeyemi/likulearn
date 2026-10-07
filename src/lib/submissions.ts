@@ -117,7 +117,7 @@ export async function saveRegistration(
     throw new SubmissionError('Too many registrations from your network. Please try again later, or email us.', 429);
   }
   if ((byEmail.results[0]?.n ?? 0) >= MAX_PER_EMAIL_PER_DAY) {
-    throw new SubmissionError('We’ve already received registrations for this email today — our team will be in touch soon.', 429);
+    throw new SubmissionError('We’ve already received registrations for this email today. Our team will be in touch soon.', 429);
   }
 
   const reg: Registration = { ...data, id: crypto.randomUUID(), createdAt: new Date().toISOString() };

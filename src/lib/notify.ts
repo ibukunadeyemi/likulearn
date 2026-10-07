@@ -39,7 +39,7 @@ export async function onRegistration(env: NotifyEnv, reg: Registration) {
     }),
     sendEmail(env, {
       to: (env.TEAM_EMAIL ?? '').split(',').map((s) => s.trim()).filter(Boolean),
-      subject: `New registration: ${reg.parent.name} — ${reg.children.length === 1 ? reg.children[0].name : `${reg.children.length} children`}`,
+      subject: `New registration: ${reg.parent.name}: ${reg.children.length === 1 ? reg.children[0].name : `${reg.children.length} children`}`,
       ...teamEmail(reg),
       idempotencyKey: `registration-${reg.id}-team`,
       replyTo: reg.parent.email,
@@ -145,12 +145,12 @@ function parentEmail(reg: Registration) {
   const html = layout(`Thank you, ${first}!`, `
 <p style="margin:0 0 16px;line-height:1.6">We’ve received your registration. Here’s what you sent us:</p>
 ${childBlocks(reg)}
-<p style="margin:16px 0 8px;line-height:1.6"><strong>Plan:</strong> ${esc(reg.plan.title)} — every child starts with a free trial class.</p>
+<p style="margin:16px 0 8px;line-height:1.6"><strong>Plan:</strong> ${esc(reg.plan.title)}. Every child starts with a free trial class.</p>
 <h2 style="font-size:16px;margin:24px 0 8px">What happens next</h2>
 <ol style="margin:0;padding-left:20px;line-height:1.7;color:${BRAND.muted}">
 <li>We match a teacher for every subject, within 48 hours.</li>
 <li>We email you the trial class time, in ${esc(reg.parent.tz)}.</li>
-<li>Your child joins the live class — then you pick the plan that fits.</li>
+<li>Your child joins the live class, then you pick the plan that fits.</li>
 </ol>
 <p style="margin:24px 0 0;line-height:1.6;color:${BRAND.muted}">Questions? Just reply to this email.</p>`);
   const text = `Thank you, ${first}!
@@ -159,12 +159,12 @@ We've received your registration:
 
 ${reg.summary}
 
-Plan: ${reg.plan.title} — every child starts with a free trial class.
+Plan: ${reg.plan.title}. Every child starts with a free trial class.
 
 What happens next
 1. We match a teacher for every subject, within 48 hours.
 2. We email you the trial class time, in ${reg.parent.tz}.
-3. Your child joins the live class — then you pick the plan that fits.
+3. Your child joins the live class, then you pick the plan that fits.
 
 Questions? Just reply to this email.
 Likulearn · ${home.contact_email}`;
