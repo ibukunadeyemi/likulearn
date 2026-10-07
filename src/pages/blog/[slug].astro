@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageBand from '../../components/PageBand.astro';
+import Photo from '../../components/Photo.astro';
+import { posts, type Post } from '../../data/content';
+
+export const getStaticPaths = (() => posts.map((post) => ({ params: { slug: post.slug }, props: { post } }))) satisfies GetStaticPaths;
+
+const { post } = Astro.props as { post: Post };
+const date = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(post.date));
+---
+<BaseLayout title={`${post.title} | Likulearn`} description={post.excerpt} image={post.cover.src}>
+  <PageBand eyebrow={date} title={post.title} lead={post.excerpt} />
+  <article class="article">
+    <figure class="cover" data-reveal="zoom">
+      <Photo image={post.cover} class="fade-img" priority sizes="(max-width: 760px) 100vw, 760px" widths={[480, 800, 1200]} />
+      {post.cover_credit && (
+        <figcaption class="credit">
+          {post.cover_credit_url
+            ? <a href={post.cover_credit_url} target="_blank" rel="noopener">{post.cover_credit}</a>
+            : post.cover_credit}
+        </figcaption>
+      )}
+    </figure>
+    <div class="prose" data-reveal>
+      {post.body.map((para) => <p>{para}</p>)}
+    </div>
+    <aside class="cta" data-reveal>
+      <h2>Try a free class</h2>
+      <p>Live online lessons with a vetted teacher, matched to your child.</p>
+      <a href="/#enrol" class="btn btn-orange">Book a free trial</a>
+    </aside>
+    <a href="/blog" class="back">← All posts</a>
+  </article>
+</BaseLayout>
+
+<style>
+  .article { max-width: 760px; margin: 0 auto; padding: 0 24px 96px; }
+  .cover {
+    margin-top: -32px; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden;
+    border: 5px solid #fff; background: #E8EEED; box-shadow: 0 24px 50px -24px rgba(14,59,54,.4);
+  }
+  .cover :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .prose { margin-top: 40px; font-size: 17px; line-height: 1.8; color: #2A3836; }
+  .prose p { margin: 0 0 1.2em; }
+  .cta { margin-top: 48px; padding: 28px; border-radius: 18px; background: var(--cream); text-align: center; }
+  .cta h2 { margin: 0 0 6px; font-size: 22px; font-weight: 500; }
+  .cta p { margin: 0 0 18px; color: var(--muted); font-size: 15px; }
+  .back { display: inline-block; margin-top: 32px; font-size: 14px; }
+  @media (max-width: 720px) {
+    .article { padding: 0 16px 72px; }
+    .cover { margin-top: -24px; border-width: 4px; border-radius: 16px; }
+    .prose { font-size: 16px; }
+  }
+</style>

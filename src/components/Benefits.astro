@@ -1,0 +1,51 @@
+---
+import Rich from './Rich.astro';
+import { BENEFIT_COLORS, BENEFIT_ICONS } from '../lib/ui';
+
+interface Props {
+  title?: string | null;
+  intro?: string | null;
+  benefits?: { title: string; text?: string | null; icon?: string | null; color?: string | null }[];
+}
+const { title, intro, benefits = [] } = Astro.props;
+---
+<section id="benefits" class="section benefits">
+  <h2 class="section-title tight" data-reveal><Rich text={title} /></h2>
+  {intro && <p class="section-lead" data-reveal>{intro}</p>}
+  <div class="benefit-grid">
+    {benefits.map((b, i) => (
+      <article class:list={['benefit', { featured: i === 0 }]} data-reveal>
+        <div class="benefit-icon" style={`background:${BENEFIT_COLORS[b.color ?? ''] ?? BENEFIT_COLORS.orange}`}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={BENEFIT_ICONS[b.icon ?? ''] ?? BENEFIT_ICONS.star} /></svg>
+        </div>
+        <h3>{b.title}</h3>
+        {b.text && <p>{b.text}</p>}
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .benefits { padding-top: 24px; }
+  .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 36px 20px; }
+  .benefit {
+    position: relative; border: 1.5px solid var(--ink); border-radius: 6px;
+    padding: 36px 22px 24px; background: #fff; color: var(--ink);
+    transition: transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out), background 300ms ease, color 300ms ease;
+  }
+  .benefit:hover { transform: translate(-3px, -3px); box-shadow: 5px 5px 0 var(--ink); }
+  .benefit.featured { background: var(--green); color: #fff; }
+  .benefit.featured:hover { box-shadow: 5px 5px 0 var(--orange); }
+  .benefit-icon {
+    position: absolute; top: -16px; left: 16px; width: 32px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--ink);
+    transition: transform 400ms var(--ease-out);
+  }
+  .benefit:hover .benefit-icon { transform: translateY(-3px) rotate(-10deg); }
+  h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  p { font-size: 14px; line-height: 1.6; margin: 0; opacity: .8; }
+  @media (max-width: 720px) {
+    .benefits { padding-top: 16px; }
+    .benefit-grid { grid-template-columns: 1fr; }
+  }
+</style>

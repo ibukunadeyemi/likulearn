@@ -1,0 +1,38 @@
+---
+/**
+ * Responsive <img>. Unsplash photos get a srcset built from Unsplash's own resizing
+ * (the `w` URL parameter), so the static site needs no image processing.
+ */
+import type { Img } from '../data/content';
+
+interface Props {
+  image: Img;
+  class?: string;
+  /** Load immediately (above the fold) instead of lazily. */
+  priority?: boolean;
+  /** How wide the image is shown, for the browser to pick a size. */
+  sizes?: string;
+  widths?: number[];
+}
+const { image, class: className, priority = false, sizes = '100vw', widths = [480, 800, 1200, 1600] } = Astro.props;
+
+const isUnsplash = image.src.startsWith('https://images.unsplash.com/');
+const sized = (w: number) => {
+  const u = new URL(image.src);
+  u.searchParams.set('w', String(w));
+  return u.href;
+};
+const srcset = isUnsplash ? widths.map((w) => `${sized(w)} ${w}w`).join(', ') : undefined;
+---
+<img
+  class={className}
+  src={isUnsplash ? sized(widths[Math.min(2, widths.length - 1)]) : image.src}
+  srcset={srcset}
+  sizes={srcset ? sizes : undefined}
+  alt={image.alt}
+  width={image.width}
+  height={image.height}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding="async"
+  fetchpriority={priority ? 'high' : undefined}
+/>

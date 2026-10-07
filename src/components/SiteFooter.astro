@@ -1,0 +1,131 @@
+---
+import { NAV_LINKS } from '../data/site';
+import { whatsappHref } from '../lib/ui';
+
+interface Props {
+  title?: string | null;
+  about?: string | null;
+  email?: string | null;
+  whatsapp?: string | null;
+}
+const { title, about, email, whatsapp } = Astro.props;
+const wa = whatsappHref(whatsapp);
+---
+<footer class="footer">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="inner">
+    <div class="cta" data-reveal>
+      <h2>{title || "Let's Connect There"}</h2>
+      <a href="/#enrol" class="btn btn-orange">Enrol your child<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
+    </div>
+    <div class="cols">
+      <div data-reveal>
+        <img src="/logo-dark.svg" alt="Likulearn" width="140" height="39" class="logo" />
+        {about && <p class="about">{about}</p>}
+      </div>
+      <div class="col" data-reveal>
+        <div class="head">Navigation</div>
+        {NAV_LINKS.map((l) => <a href={l.href}>{l.label}</a>)}
+      </div>
+      <div class="col" data-reveal>
+        <div class="head">Contact</div>
+        {email && <a href={`mailto:${email}`}>{email}</a>}
+        {wa ? <a href={wa} target="_blank" rel="noopener">WhatsApp support</a> : <span>WhatsApp support</span>}
+      </div>
+      <div class="col" data-reveal>
+        <div class="head">Get the latest tips</div>
+        <form class="news-form" id="news-form" novalidate>
+          <label class="sr-only" for="news-email">Email address</label>
+          <input id="news-email" type="email" placeholder="Email address" autocomplete="email" />
+          <!-- Spam honeypot: hidden from people, filled in by bots. -->
+          <input class="hp-field" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit" aria-label="Subscribe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></button>
+        </form>
+        <div class="news-done" id="news-done" hidden>Thanks — you're on the list.</div>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© {new Date().getFullYear()} Likulearn · likulearn.com. All rights reserved.</span>
+      <span>Terms &amp; Conditions · Privacy Policy</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  import { EMAIL_RE, postJSON } from '../scripts/enrol';
+
+  // Signups are saved to the "Subscribers" collection in the CMS (src/pages/api/subscribe.ts).
+  const NEWSLETTER_ENDPOINT = '/api/subscribe';
+  const form = document.getElementById('news-form') as HTMLFormElement;
+  const done = document.getElementById('news-done')!;
+  const input = document.getElementById('news-email') as HTMLInputElement;
+
+  const fail = () => {
+    form.classList.remove('invalid');
+    void form.offsetWidth; // restart the shake animation
+    form.classList.add('invalid');
+  };
+  input.addEventListener('input', () => form.classList.remove('invalid'));
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const email = input.value.trim();
+    if (!EMAIL_RE.test(email)) { fail(); input.focus(); return; }
+    try {
+      const website = (form.querySelector('[name="website"]') as HTMLInputElement | null)?.value ?? '';
+      await postJSON(NEWSLETTER_ENDPOINT, { email, website });
+      form.hidden = true;
+      done.hidden = false;
+    } catch {
+      fail();
+    }
+  });
+</script>
+
+<style>
+  .footer { background: var(--green); color: #fff; position: relative; overflow: hidden; }
+  .glow {
+    position: absolute; bottom: -220px; left: -120px; width: 480px; height: 420px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,122,26,.18) 0%, rgba(255,122,26,0) 70%);
+    filter: blur(50px); pointer-events: none;
+  }
+  .inner { max-width: 1200px; margin: 0 auto; padding: 72px 24px 32px; position: relative; }
+  .cta {
+    display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
+    padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.15);
+  }
+  .cta h2 { font-size: clamp(28px, 3.6vw, 44px); font-weight: 500; margin: 0; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; padding: 40px 0; }
+  .cols > div { min-width: 0; }
+  .logo { height: 39px; width: auto; margin-bottom: 16px; }
+  .about { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.65); margin: 0; max-width: 320px; }
+  .col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-size: 14px; }
+  .col a, .col span { color: rgba(255,255,255,.75); }
+  .col a { transition: color 200ms ease, transform 250ms var(--ease-out); }
+  .col a:hover { color: #fff; transform: translateX(4px); }
+  .head { color: var(--orange-light); font-weight: 500; margin-bottom: 4px; }
+  .news-form {
+    display: flex; background: #fff; border-radius: 10px; padding: 4px; width: 100%;
+    transition: box-shadow 200ms ease;
+  }
+  .news-form input { flex: 1; min-width: 0; border: none; padding: 10px 12px; font-size: 14px; background: none; color: var(--ink); }
+  .news-form input:focus-visible { outline: none; }
+  .news-form:focus-within { box-shadow: 0 0 0 3px rgba(255,154,71,.6); }
+  .news-form.invalid { box-shadow: 0 0 0 3px #FF8A65; animation: shake 420ms var(--ease-out); }
+  .news-form button {
+    background: var(--orange); border: none; border-radius: 8px; width: 40px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background 200ms ease;
+  }
+  .news-form button svg { transition: transform 250ms var(--ease-out); }
+  .news-form button:hover { background: var(--orange-hover); }
+  .news-form button:hover svg { transform: translateX(2px); }
+  .hp-field { position: absolute; left: -10000px; width: 1px; height: 1px; opacity: 0; }
+  .news-done { color: rgba(255,255,255,.85); animation: rise-in 500ms var(--ease-out) both; }
+  .bottom {
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,.15);
+    font-size: 13px; color: rgba(255,255,255,.55);
+  }
+  @media (max-width: 720px) {
+    .inner { padding: 56px 16px 28px; }
+  }
+</style>

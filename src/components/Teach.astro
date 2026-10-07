@@ -1,0 +1,87 @@
+---
+import Photo from './Photo.astro';
+import Rich from './Rich.astro';
+import type { Home } from '../data/content';
+
+interface Props { home: Home }
+const { home } = Astro.props;
+const perks = home.teach_perks ?? [];
+---
+<section id="teach" class="section teach">
+  <div class="teach-photo-wrap" data-reveal="left">
+    <div class="orbit" aria-hidden="true"><span></span></div>
+    <figure class="teach-photo">
+      <Photo image={home.teach_image} class="fade-img" sizes="440px" widths={[480, 880]} />
+      {home.teach_image_credit && (
+        <figcaption class="credit">
+          {home.teach_image_credit_url
+            ? <a href={home.teach_image_credit_url} target="_blank" rel="noopener">{home.teach_image_credit}</a>
+            : home.teach_image_credit}
+        </figcaption>
+      )}
+    </figure>
+    {home.teach_badge_title && (
+      <div class="teach-badge">
+        <strong>{home.teach_badge_title}</strong>
+        {home.teach_badge_text && <span>{home.teach_badge_text}</span>}
+      </div>
+    )}
+  </div>
+  <div data-reveal="right">
+    <h2 class="teach-title"><Rich text={home.teach_title} accentClass="highlight" /></h2>
+    {home.teach_text && <p class="teach-text">{home.teach_text}</p>}
+    {perks.length > 0 && (
+      <ul class="perks">
+        {perks.map((p) => <li>{p}</li>)}
+      </ul>
+    )}
+    {home.teach_cta_label && home.teach_cta_url && (
+      <a href={home.teach_cta_url} class="btn btn-green">{home.teach_cta_label}</a>
+    )}
+  </div>
+</section>
+
+<style>
+  .teach { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 56px; align-items: center; }
+  .teach-photo-wrap { position: relative; max-width: 440px; width: 100%; justify-self: center; }
+  .teach-photo { aspect-ratio: 1; border-radius: 50%; overflow: hidden; background: #F2F2F2; position: relative; }
+  .teach-photo :global(img) { transition: transform 900ms var(--ease-out), opacity 600ms ease; }
+  .teach-photo-wrap:hover .teach-photo :global(img) { transform: scale(1.05); }
+  .teach-photo .credit { right: 50%; transform: translateX(50%); bottom: 18px; white-space: nowrap; }
+  /* A small dot orbiting the photo. */
+  .orbit {
+    position: absolute; inset: -14px; border-radius: 50%;
+    border: 1.5px dashed rgba(14,59,54,.18);
+    animation: spin-slow 30s linear infinite;
+  }
+  .orbit span {
+    position: absolute; top: 50%; left: -7px; width: 14px; height: 14px; margin-top: -7px;
+    border-radius: 50%; background: var(--orange);
+  }
+  .teach-badge {
+    position: absolute; left: -8px; bottom: 36px; background: #fff; border-radius: 12px;
+    padding: 12px 16px; box-shadow: 0 12px 30px -10px rgba(14,59,54,.3); font-size: 13px;
+    display: flex; flex-direction: column;
+    animation: float 7s ease-in-out infinite;
+  }
+  .teach-badge strong { font-weight: 600; }
+  .teach-badge span { color: var(--muted); }
+  .teach-title { font-size: clamp(28px, 3.4vw, 40px); font-weight: 500; line-height: 1.25; margin: 0 0 18px; }
+  /* .highlight lives in global.css: it is rendered by Rich.astro. */
+  .teach-text { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0 0 24px; text-wrap: pretty; }
+  .perks { list-style: none; padding: 0; margin: 0 0 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+  .perks li { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .perks li::before {
+    content: ""; width: 18px; height: 18px; border-radius: 50%; flex: none;
+    background: var(--orange) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 11px no-repeat;
+    transition: transform 300ms var(--ease-out);
+  }
+  .perks li:hover::before { transform: scale(1.2) rotate(-10deg); }
+  @media (max-width: 720px) {
+    .teach { grid-template-columns: 1fr; gap: 40px; }
+    .teach-badge { left: 0; }
+  }
+  @media (max-width: 380px) {
+    .perks { grid-template-columns: 1fr; }
+  }
+</style>

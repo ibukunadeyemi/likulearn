@@ -1,0 +1,12 @@
+---
+/** Renders a CMS heading: *word* gets the accent style, new lines become line breaks. */
+import { richParts } from '../lib/ui';
+
+interface Props {
+  text?: string | null;
+  /** Class for *accented* words; must be a global style (scoped styles don't reach here). */
+  accentClass?: string;
+}
+const { text, accentClass = 'accent' } = Astro.props;
+---
+{richParts(text).map((p) => ('br' in p ? <br /> : p.accent ? <span class={accentClass}>{p.text}</span> : p.text))}

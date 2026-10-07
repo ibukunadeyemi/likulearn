@@ -1,0 +1,29 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "likulearn",
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	// Registrations and newsletter signups. Schema lives in ./migrations.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "likulearn",
+			"migrations_dir": "../../migrations",
+			"database_id": "04c2107c-5339-4119-bfe9-18a24cd562a0",
+		},
+	],
+	// Public settings. Secrets (RESEND_API_KEY, AUTOMATION_WEBHOOK_URL, WEBHOOK_SECRET,
+	// IP_HASH_SALT) are set with `wrangler secret put <NAME>`, and in .dev.vars locally.
+	"vars": {
+		"SITE_URL": "https://likulearn.com",
+		// Sender for parent confirmations and team alerts. The domain must be verified in Resend.
+		"EMAIL_FROM": "Likulearn <hello@likulearn.com>",
+		// Where team alerts go (comma-separate several addresses).
+		"TEAM_EMAIL": "hello@likulearn.com",
+	},
+	"observability": {
+		"enabled": true
+	},
+}

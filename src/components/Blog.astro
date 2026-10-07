@@ -1,0 +1,65 @@
+---
+import Photo from './Photo.astro';
+import Rich from './Rich.astro';
+import type { Post } from '../data/content';
+
+interface Props {
+  title?: string | null;
+  posts: Post[];
+}
+const { title, posts } = Astro.props;
+---
+<section id="blog" class="section">
+  <div class="blog-head" data-reveal>
+    <h2><Rich text={title} /></h2>
+    <a href="/blog" class="see-all">See all
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></span>
+    </a>
+  </div>
+  <div class="blog-grid">
+    {posts.map((p) => (
+      <a href={`/blog/${p.slug}`} class="post" data-reveal>
+        <figure class="post-img">
+          <Photo image={p.cover} class="fade-img" sizes="(max-width: 720px) 100vw, 360px" widths={[480, 800]} />
+        </figure>
+        <div class="post-body">
+          <h3>{p.title}</h3>
+          {p.excerpt && <p>{p.excerpt}</p>}
+          <span class="more">Read more <span aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .blog-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px; flex-wrap: wrap; }
+  h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 500; line-height: 1.2; margin: 0; }
+  .see-all { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .see-all > span {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 300ms var(--ease-out), background 200ms ease;
+  }
+  .see-all:hover > span { transform: translateX(4px) rotate(-45deg); background: var(--orange-hover); }
+  .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+  .post {
+    display: flex; flex-direction: column; background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 14px 40px -18px rgba(14,59,54,.3); color: var(--ink);
+    transition: transform 350ms var(--ease-out), box-shadow 350ms var(--ease-out);
+  }
+  .post:hover { color: var(--ink); transform: translateY(-6px); box-shadow: 0 24px 50px -20px rgba(14,59,54,.45); }
+  .post-img { aspect-ratio: 16 / 10; background: #E8EEED; overflow: hidden; }
+  .post-img :global(img) { transition: transform 700ms var(--ease-out), opacity 600ms ease; }
+  .post:hover .post-img :global(img) { transform: scale(1.06); }
+  .post-body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 8px; }
+  h3 { font-size: 17px; font-weight: 500; margin: 0; line-height: 1.35; transition: color 200ms ease; }
+  .post:hover h3 { color: var(--green); }
+  p { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0; }
+  .more { color: var(--orange); font-size: 13px; margin-top: 6px; }
+  .more span { display: inline-block; transition: transform 250ms var(--ease-out); }
+  .post:hover .more span { transform: translateX(4px); }
+  @media (max-width: 720px) {
+    .blog-grid { grid-template-columns: 1fr; }
+  }
+</style>

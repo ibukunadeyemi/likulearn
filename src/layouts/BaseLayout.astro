@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { home } from '../data/content';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Absolute or root-relative image for link previews. */
+  image?: string | null;
+}
+
+const {
+  title,
+  description = 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes and book a free trial class.',
+  image,
+} = Astro.props;
+
+const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin).href : null;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0E3B36" />
+    <meta property="og:site_name" content="Likulearn" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet" />
+
+    <!-- Turn on entrance/reveal motion before first paint, unless the visitor asked for reduced motion. -->
+    <script is:inline>
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('js-motion');
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <SiteHeader />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter title={home.footer_title} about={home.footer_about} email={home.contact_email} whatsapp={home.whatsapp_number} />
+
+    <script>
+      const root = document.documentElement;
+
+      // Fade images in once loaded.
+      document.querySelectorAll<HTMLImageElement>('img.fade-img').forEach((img) => {
+        if (img.complete && img.naturalWidth) img.classList.add('loaded');
+        else img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+      });
+
+      // Scroll reveal: fade/rise blocks as they enter the viewport, staggered among siblings.
+      if (root.classList.contains('js-motion')) {
+        const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        // Once the entrance finishes, drop the reveal styles so the element's own hover transitions apply.
+        const reveal = (el: HTMLElement) => {
+          el.classList.add('is-visible');
+          const done = (ev: TransitionEvent) => {
+            if (ev.target !== el || ev.propertyName !== 'transform') return;
+            el.removeEventListener('transitionend', done);
+            el.removeAttribute('data-reveal');
+            el.classList.remove('is-visible');
+            el.style.removeProperty('--reveal-i');
+          };
+          el.addEventListener('transitionend', done);
+        };
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            reveal(e.target as HTMLElement);
+            io.unobserve(e.target);
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+        const seen = new Map<Element | null, number>();
+        els.forEach((el) => {
+          const i = seen.get(el.parentElement) ?? 0;
+          seen.set(el.parentElement, i + 1);
+          el.style.setProperty('--reveal-i', String(Math.min(i, 7)));
+          io.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>

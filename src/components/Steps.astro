@@ -1,0 +1,97 @@
+---
+import Rich from './Rich.astro';
+
+interface Props {
+  title?: string | null;
+  steps?: { title: string; text?: string | null }[];
+}
+const { title, steps = [] } = Astro.props;
+
+// Card looks and icons cycle in this order, whatever the number of steps.
+const LOOKS = [
+  {
+    tone: 'green', deco: 'deco-rings',
+    icon: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
+  },
+  {
+    tone: 'orange', deco: 'deco-blob',
+    icon: '<path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>',
+  },
+  {
+    tone: 'blue', deco: 'deco-dots',
+    icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4M10 7l5 3-5 3z"/>',
+  },
+];
+---
+<section id="how" class="section">
+  <h2 class="section-title" data-reveal><Rich text={title} /></h2>
+  <div class="step-grid">
+    {steps.map((step, i) => {
+      const look = LOOKS[i % LOOKS.length];
+      return (
+        <article class={`step-card step-${look.tone}`} data-reveal>
+          <div class={`step-deco ${look.deco}`} aria-hidden="true"></div>
+          <div class="step-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={look.icon} />
+          </div>
+          <div class="step-num">{String(i + 1).padStart(2, '0')}</div>
+          <h3>{step.title}</h3>
+          {step.text && <p>{step.text}</p>}
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .step-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .step-card {
+    color: #fff; border-radius: 24px; padding: 32px 28px; min-height: 280px;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    transition: transform 400ms var(--ease-out), box-shadow 400ms var(--ease-out);
+  }
+  .step-card:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -20px rgba(14,59,54,.55); }
+  .step-card h3 { font-size: 26px; font-weight: 500; margin: 0 0 10px; line-height: 1.15; position: relative; }
+  .step-card p { font-size: 14px; line-height: 1.6; margin: 0; position: relative; }
+  .step-num { font-size: 13px; margin-bottom: 6px; position: relative; }
+  .step-icon {
+    position: absolute; top: 28px; left: 28px; width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center;
+    transition: transform 400ms var(--ease-out);
+  }
+  .step-card:hover .step-icon { transform: rotate(-8deg) scale(1.1); }
+  .step-deco { position: absolute; transition: transform 800ms var(--ease-out); }
+  .step-green { background: var(--green); }
+  .step-green .step-icon { background: rgba(255,255,255,.12); }
+  .step-green .step-num { opacity: .6; }
+  .step-green p { opacity: .75; }
+  .step-orange { background: var(--amber); }
+  .step-orange .step-num { opacity: .75; }
+  .step-orange p { opacity: .9; }
+  .step-blue { background: var(--blue); }
+  .step-blue .step-num { opacity: .8; }
+  .step-blue p { opacity: .92; }
+  .deco-rings {
+    right: -40px; top: -40px; width: 150px; height: 150px; border-radius: 50%;
+    background: repeating-radial-gradient(circle, transparent 0 8px, var(--amber) 8px 12px);
+  }
+  .step-card:hover .deco-rings { transform: scale(1.15) rotate(20deg); }
+  .deco-blob {
+    right: -20px; top: -30px; width: 120px; height: 150px; background: var(--green);
+    border-radius: 70% 30% 60% 40% / 50% 60% 40% 50%; transform: rotate(25deg);
+    animation: morph 9s ease-in-out infinite;
+  }
+  @keyframes morph {
+    50% { border-radius: 40% 60% 35% 65% / 60% 40% 60% 40%; }
+  }
+  .step-card:hover .deco-blob { transform: rotate(45deg) scale(1.08); }
+  .deco-dots {
+    right: 20px; top: 24px; width: 90px; height: 70px; opacity: .7;
+    background-image: radial-gradient(#fff 2px, transparent 2px); background-size: 12px 12px;
+  }
+  .step-card:hover .deco-dots { transform: translate(-6px, 6px); }
+  @media (max-width: 720px) {
+    .step-grid { grid-template-columns: 1fr; }
+  }
+</style>

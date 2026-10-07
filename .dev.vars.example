@@ -1,0 +1,11 @@
+# Copy to .dev.vars for local development (never commit .dev.vars).
+# In production set each with: npx wrangler secret put <NAME>
+
+# https://resend.com — API key with "Sending access". Leave empty to skip emails.
+RESEND_API_KEY=
+# Make / Zapier / n8n "custom webhook" URL. Leave empty to skip.
+AUTOMATION_WEBHOOK_URL=
+# Any long random string; used to sign webhook payloads (X-Likulearn-Signature).
+WEBHOOK_SECRET=
+# Any long random string; salts the IP hashes used for rate limiting.
+IP_HASH_SALT=

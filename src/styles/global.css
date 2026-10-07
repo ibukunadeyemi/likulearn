@@ -1,0 +1,188 @@
+:root {
+  --green: #0E3B36;
+  --green-hover: #14504A;
+  --ink: #14211F;
+  --muted: #5D6B69;
+  --orange: #FF7A1A;
+  --orange-hover: #E0620A;
+  --orange-light: #FF9A47;
+  --amber: #F59E4C;
+  --blue: #6CB4F5;
+  --yellow: #FFC93C;
+  --star: #FFB547;
+  --cream: #FFF4EC;
+  --line: #DCE3E2;
+  --line-warm: #EEE6DF;
+  --error: #B4471A;
+
+  --nav-h: 74px;
+  --nav-glass: rgba(14, 59, 54, 0.82);
+  /* One easing curve everywhere so the motion feels consistent. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: 'Lexend', system-ui, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+/* Side-entering reveals and decorations must never cause a horizontal scrollbar. */
+main { overflow-x: clip; }
+img { display: block; max-width: 100%; }
+a { color: var(--orange); text-decoration: none; }
+a:hover { color: var(--orange-hover); }
+input, select, textarea, button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; top: 12px; left: 12px; z-index: 100;
+  background: #fff; color: var(--green); padding: 10px 16px; border-radius: 10px;
+  font-size: 14px; font-weight: 500; transform: translateY(-160%);
+  transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus { transform: none; }
+
+/* ---------- shared pieces ---------- */
+.grid-bg {
+  background-color: var(--green);
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  position: relative;
+  overflow: hidden;
+}
+.btn {
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-size: 15px; font-weight: 500; padding: 14px 26px; border-radius: 999px;
+  white-space: nowrap; border: none; cursor: pointer;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease,
+    transform 250ms var(--ease-out), box-shadow 250ms var(--ease-out);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0) scale(.98); transition-duration: 80ms; }
+.btn svg { transition: transform 250ms var(--ease-out); }
+.btn:hover svg.arrow { transform: translateX(3px); }
+.btn-sm { font-size: 14px; padding: 10px 18px; border-radius: 10px; }
+.btn-orange { background: var(--orange); color: #fff; }
+.btn-orange:hover { background: var(--orange-hover); color: #fff; box-shadow: 0 10px 24px -10px rgba(255,122,26,.7); }
+.btn-white { background: #fff; color: var(--green); }
+.btn-white:hover { background: #FFE6D3; color: var(--green); box-shadow: 0 10px 24px -10px rgba(0,0,0,.35); }
+.btn-ghost { border: 1px solid rgba(255,255,255,.4); color: #fff; background: transparent; font-weight: 400; padding: 14px 24px; }
+.btn-ghost:hover { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.7); }
+.btn-green { background: var(--green); color: #fff; padding: 14px 28px; }
+.btn-green:hover { background: var(--green-hover); color: #fff; box-shadow: 0 10px 24px -10px rgba(14,59,54,.6); }
+/* Light sweep across primary buttons on hover. */
+.btn-orange::after, .btn-white::after, .btn-green::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+}
+.btn-orange:hover::after, .btn-white:hover::after, .btn-green:hover::after {
+  transform: translateX(120%); transition: transform 700ms var(--ease-out);
+}
+
+.section { max-width: 1100px; margin: 0 auto; padding: 96px 24px; }
+.section-title {
+  text-align: center; font-size: clamp(26px, 3.4vw, 38px); font-weight: 500;
+  margin: 0 0 48px; letter-spacing: -.01em; line-height: 1.25;
+}
+.section-title.tight { margin-bottom: 14px; }
+.section-lead {
+  text-align: center; color: var(--muted); font-size: 15px; line-height: 1.6;
+  max-width: 620px; margin: 0 auto 56px; text-wrap: pretty;
+}
+.accent { color: var(--orange); }
+.accent-light { color: var(--orange-light); }
+.decor { position: absolute; pointer-events: none; }
+.stars { color: var(--star); font-size: 14px; letter-spacing: 2px; }
+
+figure { margin: 0; position: relative; }
+figure img { width: 100%; height: 100%; object-fit: cover; }
+.credit {
+  position: absolute; right: 10px; bottom: 8px; font-size: 11px;
+  background: rgba(0,0,0,.45); border-radius: 6px; padding: 3px 8px;
+  opacity: 0; transition: opacity .2s;
+}
+figure:hover .credit, .credit:focus-within { opacity: 1; }
+.credit a, .credit a:hover { color: #fff; }
+
+/* Images fade in once loaded (class set by the layout script). Zero specificity so
+   components can add their own transitions — they should keep `opacity` in the list. */
+:where(html.js-motion img.fade-img) { opacity: 0; transition: opacity 600ms ease; }
+:where(html.js-motion img.fade-img.loaded) { opacity: 1; }
+
+/* ---------- motion ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 280ms; animation-timing-function: var(--ease-out); }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: .7; }
+}
+@keyframes draw { from { stroke-dashoffset: 340; } to { stroke-dashoffset: 0; } }
+@keyframes pop {
+  0% { transform: scale(.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes shake {
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+@keyframes chip-pop { 50% { transform: scale(1.08); } }
+
+/* Scroll reveal: blocks fade and rise as they enter the viewport, staggered within each group. */
+html.js-motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 80ms);
+}
+html.js-motion [data-reveal="left"] { transform: translateX(-28px); }
+html.js-motion [data-reveal="right"] { transform: translateX(28px); }
+html.js-motion [data-reveal="zoom"] { transform: scale(.94); }
+html.js-motion [data-reveal].is-visible { opacity: 1; transform: none; }
+
+@media (max-width: 720px) {
+  .section { padding: 72px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important; transition-delay: 0ms !important;
+  }
+  @view-transition { navigation: none; }
+}
+
+/* Boxed accent used in the "Teach" heading (rendered by Rich.astro). It sweeps in on reveal. */
+.highlight {
+  background: linear-gradient(var(--orange), var(--orange)) no-repeat left / 100% 100%;
+  color: #fff; padding: 0 10px; border-radius: 6px;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  transition: background-size 900ms 300ms var(--ease-out);
+}
+html.js-motion [data-reveal]:not(.is-visible) .highlight { background-size: 0% 100%; }

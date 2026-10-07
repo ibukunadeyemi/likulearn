@@ -1,0 +1,67 @@
+---
+import Rich from './Rich.astro';
+
+interface Props {
+  title?: string | null;
+  intro?: string | null;
+  testimonials: { name: string; role?: string | null; quote: string }[];
+}
+const { title, intro, testimonials } = Astro.props;
+---
+<section class="testimonials grid-bg">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="inner">
+    <h2 class="section-title tight" data-reveal><Rich text={title} accentClass="accent-light" /></h2>
+    {intro && <p class="section-lead" data-reveal>{intro}</p>}
+    <div class="grid">
+      {testimonials.map((t) => (
+        <article class="card" data-reveal>
+          <div class="head">
+            <span class="avatar" aria-hidden="true">{t.name.charAt(0)}</span>
+            <div>
+              <div class="name">{t.name}</div>
+              {t.role && <div class="role">{t.role}</div>}
+            </div>
+            <svg class="quote-mark" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.2 6C4.6 7.3 3 9.7 3 12.6V18h6v-6H6c0-1.9 1-3.4 2.6-4.3L7.2 6zm10 0c-2.6 1.3-4.2 3.7-4.2 6.6V18h6v-6h-3c0-1.9 1-3.4 2.6-4.3L17.2 6z" /></svg>
+          </div>
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <blockquote>{t.quote}</blockquote>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .glow {
+    position: absolute; width: 520px; height: 520px; right: -160px; top: -160px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,154,71,.18), transparent 65%);
+    filter: blur(20px); pointer-events: none;
+    animation: float 12s ease-in-out infinite;
+  }
+  .inner { max-width: 1200px; margin: 0 auto; padding: 96px 24px; position: relative; }
+  .section-title { color: #fff; font-size: clamp(28px, 3.4vw, 40px); }
+  .section-lead { color: rgba(255,255,255,.65); max-width: 520px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .card {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+    padding: 26px; color: #fff; display: flex; flex-direction: column; gap: 14px;
+    transition: transform 350ms var(--ease-out), background 300ms ease, border-color 300ms ease;
+  }
+  .card:hover { transform: translateY(-6px); background: rgba(255,255,255,.1); border-color: rgba(255,154,71,.45); }
+  .head { display: flex; align-items: center; gap: 12px; }
+  .head > div { flex: 1; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%; background: var(--orange-light); flex: none;
+    display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--green);
+  }
+  .name { font-weight: 500; font-size: 15px; }
+  .role { font-size: 12px; opacity: .6; }
+  .quote-mark { color: var(--orange-light); opacity: .35; transition: opacity 300ms ease, transform 400ms var(--ease-out); }
+  .card:hover .quote-mark { opacity: .8; transform: rotate(-8deg) scale(1.1); }
+  blockquote { margin: 0; font-size: 14px; line-height: 1.7; opacity: .85; }
+  @media (max-width: 720px) {
+    .inner { padding: 72px 16px; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import Steps from '../components/Steps.astro';
+import Benefits from '../components/Benefits.astro';
+import EnrolForm from '../components/EnrolForm.astro';
+import Teach from '../components/Teach.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Blog from '../components/Blog.astro';
+import { home, plans, sortedPosts, subjects, testimonials } from '../data/content';
+---
+<BaseLayout title="Likulearn — Live online classes with expert teachers" image={home.hero_image.src}>
+  <Hero home={home} />
+  <Steps title={home.steps_title} steps={home.steps} />
+  <Benefits title={home.benefits_title} intro={home.benefits_intro} benefits={home.benefits} />
+  <EnrolForm title={home.enrol_title} intro={home.enrol_intro} plans={plans} subjects={subjects} />
+  <Teach home={home} />
+  <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+  <Blog title={home.blog_title} posts={sortedPosts.slice(0, 3)} />
+</BaseLayout>

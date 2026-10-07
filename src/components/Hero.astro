@@ -1,0 +1,186 @@
+---
+import Photo from './Photo.astro';
+import type { Home } from '../data/content';
+
+interface Props { home: Home }
+const { home } = Astro.props;
+---
+<header class="hero grid-bg" id="top">
+  <div class="hero-body">
+    {home.hero_badge && (
+      <a href="#enrol" class="pill-link">
+        {home.hero_badge}
+        <span>Book now →</span>
+      </a>
+    )}
+    <h1>
+      {home.hero_title}{' '}
+      {home.hero_highlight && (
+        <span class="underline">{home.hero_highlight}
+          <svg viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11 C 60 3, 120 3, 170 8 S 260 13, 297 5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" /></svg>
+        </span>
+      )}
+    </h1>
+    {home.hero_lead && <p class="hero-lead">{home.hero_lead}</p>}
+    <div class="hero-ctas">
+      <a href="#enrol" class="btn btn-white">{home.hero_primary_label || 'Book a free trial'}</a>
+      <a href="#how" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3" /></svg>{home.hero_secondary_label || 'How it works'}
+      </a>
+    </div>
+    {home.proof_text && (
+      <div class="social-proof">
+        <div class="avatars" aria-hidden="true"><span style="background:#F59E4C"></span><span style="background:#6CB4F5"></span><span style="background:#FFD9BD"></span></div>
+        <div>
+          <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+          <div class="proof-text">{home.proof_text}</div>
+        </div>
+      </div>
+    )}
+  </div>
+
+  <div class="decor decor-star" aria-hidden="true"></div>
+  <div class="decor decor-rings" aria-hidden="true"></div>
+  <div class="decor decor-dot" aria-hidden="true"></div>
+</header>
+
+<div class="hero-photo-wrap">
+  {home.hero_image && (
+    <figure class="hero-photo">
+      <Photo image={home.hero_image} class="fade-img" priority sizes="(max-width: 1000px) 100vw, 1000px" />
+      {home.hero_image_credit && (
+        <figcaption class="credit">
+          {home.hero_image_credit_url
+            ? <a href={home.hero_image_credit_url} target="_blank" rel="noopener">{home.hero_image_credit}</a>
+            : home.hero_image_credit}
+        </figcaption>
+      )}
+    </figure>
+  )}
+  <div class="float-card float-live" aria-hidden="true">
+    <span class="live-dot"></span>
+    <div><strong>Live class</strong><span>Phonics · Age 6</span></div>
+  </div>
+  <div class="float-card float-teacher" aria-hidden="true">
+    <span class="fc-icon">✓</span>
+    <div><strong>Teacher matched</strong><span>within 48 hours</span></div>
+  </div>
+</div>
+
+<script>
+  // Gentle parallax: the hero photo settles from a slight zoom as the page scrolls.
+  const photo = document.querySelector<HTMLElement>('.hero-photo img');
+  if (photo && document.documentElement.classList.contains('js-motion')) {
+    let ticking = false;
+    const update = () => {
+      const p = Math.min(window.scrollY / 600, 1);
+      photo.style.transform = `scale(${1.08 - p * 0.08})`;
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  .hero { padding-top: var(--nav-h); }
+  .hero-body {
+    max-width: 880px; margin: 0 auto; padding: 56px 24px 220px;
+    text-align: center; position: relative; z-index: 1;
+  }
+  /* Entrance on load, staggered. */
+  .hero-body > * { animation: rise-in 800ms var(--ease-out) both; }
+  .hero-body > :nth-child(2) { animation-delay: 90ms; }
+  .hero-body > :nth-child(3) { animation-delay: 180ms; }
+  .hero-body > :nth-child(4) { animation-delay: 270ms; }
+  .hero-body > :nth-child(5) { animation-delay: 360ms; }
+
+  .pill-link {
+    display: inline-flex; align-items: center; gap: 8px; max-width: 100%; text-align: left;
+    border: 1px solid rgba(255,255,255,.2); border-radius: 999px;
+    padding: 6px 8px 6px 14px; color: rgba(255,255,255,.8); font-size: 13px;
+    transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
+  }
+  .pill-link:hover { color: #fff; border-color: rgba(255,255,255,.45); background: rgba(255,255,255,.05); }
+  .pill-link span {
+    background: #fff; color: var(--green); border-radius: 999px; padding: 3px 10px;
+    font-weight: 500; white-space: nowrap; flex: none; transition: transform 250ms var(--ease-out);
+  }
+  .pill-link:hover span { transform: translateX(2px); }
+  h1 {
+    color: #fff; font-size: clamp(34px, 5.4vw, 60px); line-height: 1.12; font-weight: 500;
+    margin: 24px 0 18px; letter-spacing: -.02em; text-wrap: balance;
+  }
+  .underline { position: relative; display: inline-block; }
+  .underline svg { position: absolute; left: 0; bottom: -10px; width: 100%; height: 14px; overflow: visible; }
+  .underline path { stroke-dasharray: 340; animation: draw 1100ms 650ms var(--ease-out) both; }
+  .hero-lead {
+    color: rgba(255,255,255,.72); font-size: 17px; line-height: 1.6;
+    max-width: 600px; margin: 0 auto 32px; text-wrap: pretty;
+  }
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .social-proof { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 28px; }
+  .avatars { display: flex; }
+  .avatars span {
+    display: block; width: 36px; height: 36px; border: 2px solid var(--green); border-radius: 50%;
+    animation: pop 500ms var(--ease-out) both;
+  }
+  .avatars span:nth-child(1) { animation-delay: 500ms; }
+  .avatars span:nth-child(2) { animation-delay: 580ms; }
+  .avatars span:nth-child(3) { animation-delay: 660ms; }
+  .avatars span + span { margin-left: -10px; }
+  .social-proof > div:last-child { text-align: left; }
+  .proof-text { color: rgba(255,255,255,.7); font-size: 12px; }
+
+  .decor-star {
+    right: 6%; top: 42%; width: 46px; height: 46px; background: var(--orange);
+    clip-path: polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);
+    animation: float 6s ease-in-out infinite;
+  }
+  .decor-rings {
+    left: 7%; top: 58%; width: 90px; height: 90px; border-radius: 50%;
+    background: repeating-radial-gradient(circle, transparent 0 7px, rgba(255,255,255,.12) 7px 9px);
+    animation: pulse-ring 5s ease-in-out infinite;
+  }
+  .decor-dot {
+    left: 14%; top: 28%; width: 12px; height: 12px; border-radius: 50%; background: var(--yellow);
+    animation: float 7s 1s ease-in-out infinite;
+  }
+
+  .hero-photo-wrap { max-width: 1000px; margin: -180px auto 0; padding: 0 24px; position: relative; z-index: 1; }
+  .hero-photo {
+    aspect-ratio: 16 / 8; border-radius: 24px; overflow: hidden; border: 6px solid #fff;
+    box-shadow: 0 30px 60px -20px rgba(14,59,54,.35); background: #E8EEED;
+    animation: rise-in 1000ms 300ms var(--ease-out) both;
+  }
+  /* The <img> comes from Photo.astro, so it needs :global. */
+  .hero-photo :global(img) { transform: scale(1.08); will-change: transform; }
+
+  .float-card {
+    position: absolute; display: flex; align-items: center; gap: 10px;
+    background: #fff; border-radius: 14px; padding: 12px 16px;
+    box-shadow: 0 16px 36px -14px rgba(14,59,54,.4); font-size: 13px;
+  }
+  .float-card div { display: flex; flex-direction: column; line-height: 1.35; }
+  .float-card strong { font-weight: 600; }
+  .float-card div span { color: var(--muted); font-size: 12px; }
+  .float-live { left: -4px; top: 18%; animation: pop 600ms 900ms var(--ease-out) both, float 7s 1.5s ease-in-out infinite; }
+  .float-teacher { right: -4px; bottom: 16%; animation: pop 600ms 1100ms var(--ease-out) both, float 8s 2s ease-in-out infinite; }
+  .live-dot {
+    width: 10px; height: 10px; border-radius: 50%; background: #22B55B; flex: none;
+    box-shadow: 0 0 0 0 rgba(34,181,91,.6); animation: live 1.8s ease-out infinite;
+  }
+  @keyframes live { to { box-shadow: 0 0 0 10px rgba(34,181,91,0); } }
+  .fc-icon {
+    width: 28px; height: 28px; border-radius: 8px; background: var(--orange); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; flex: none;
+  }
+
+  @media (max-width: 720px) {
+    .hero-body { padding: 36px 16px 160px; }
+    .hero-photo-wrap { margin-top: -120px; padding: 0 16px; }
+    .hero-photo { border-width: 4px; border-radius: 18px; aspect-ratio: 4 / 3; }
+    .decor { display: none; }
+    .float-card { display: none; }
+  }
+</style>

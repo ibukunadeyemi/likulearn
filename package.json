@@ -1,0 +1,27 @@
+{
+  "name": "likulearn",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && wrangler deploy && wrangler d1 migrations apply likulearn --remote",
+    "db:migrate": "wrangler d1 migrations apply likulearn --local",
+    "db:migrate:remote": "wrangler d1 migrations apply likulearn --remote",
+    "registrations": "wrangler d1 execute likulearn --remote --command \"SELECT created_at, status, parent_name, parent_email, parent_phone, plan, children_summary FROM registrations ORDER BY created_at DESC LIMIT 50\"",
+    "cf-types": "wrangler types"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.3.4",
+    "astro": "^7.3.6"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261006.1",
+    "wrangler": "^4.147.0"
+  }
+}

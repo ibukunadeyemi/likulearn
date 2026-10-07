@@ -1,0 +1,47 @@
+---
+import '../styles/enrol.css';
+import Rich from './Rich.astro';
+import type { Plan, SubjectGroup } from '../data/content';
+
+interface Props {
+  title?: string | null;
+  intro?: string | null;
+  plans: Plan[];
+  subjects: SubjectGroup[];
+}
+const { title, intro, plans, subjects } = Astro.props;
+---
+<section id="enrol" class="enrol">
+  <div class="decor enrol-rings" aria-hidden="true"></div>
+  <div class="decor enrol-blob" aria-hidden="true"></div>
+  <div class="enrol-inner">
+    <h2 class="section-title tight" data-reveal><Rich text={title} /></h2>
+    {intro && <p class="section-lead narrow" data-reveal>{intro}</p>}
+    <ul class="assurances" data-reveal>
+      <li>Takes about 2 minutes</li>
+      <li>No card needed</li>
+      <li>Progress saved as you go</li>
+    </ul>
+    <div class="form-card" data-reveal="zoom">
+      <div class="form-progress" aria-hidden="true"><span id="enrol-progress"></span></div>
+      <div id="enrol-form">
+        <noscript><p class="noscript">Please enable JavaScript to register, or email <a href="mailto:hello@likulearn.com">hello@likulearn.com</a>.</p></noscript>
+      </div>
+    </div>
+    <p id="enrol-status" class="sr-only" aria-live="polite"></p>
+  </div>
+  <!-- Plans and subjects from the CMS, for the form script. -->
+  <script type="application/json" id="enrol-options" set:html={JSON.stringify({ plans, subjects }).replace(/</g, '\\u003c')} />
+</section>
+
+<script>
+  import { initEnrolForm } from '../scripts/enrol';
+
+  const options = JSON.parse(document.getElementById('enrol-options')?.textContent || '{}');
+  initEnrolForm(
+    document.getElementById('enrol-form')!,
+    document.getElementById('enrol-progress'),
+    document.getElementById('enrol-status'),
+    { plans: options.plans ?? [], subjects: options.subjects ?? [] },
+  );
+</script>
