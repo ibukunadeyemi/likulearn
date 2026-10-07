@@ -8,8 +8,9 @@ import Teach from '../components/Teach.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Blog from '../components/Blog.astro';
 import { home, plans, sortedPosts, subjects, testimonials } from '../data/content';
+import { organization, website } from '../lib/seo';
 ---
-<BaseLayout title="Likulearn — Live online classes with expert teachers" image={home.hero_image.src}>
+<BaseLayout title="Live Online Classes for Kids Aged 3–18 | Likulearn" schema={[organization(), website()]}>
   <Hero home={home} />
   <Steps title={home.steps_title} steps={home.steps} />
   <Benefits title={home.benefits_title} intro={home.benefits_intro} benefits={home.benefits} />
