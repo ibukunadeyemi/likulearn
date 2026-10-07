@@ -1,5 +1,5 @@
 /**
- * All site copy. Edit here and redeploy — the site is static.
+ * All site copy. Edit here and redeploy; the site is static.
  *
  * Section headings: wrap a word in *asterisks* to colour it; "\n" starts a new line.
  */
@@ -15,7 +15,7 @@ export const home = {
   hero_badge: 'Free trial class for every new learner',
   hero_title: "Unlock Your Child's Potential with",
   hero_highlight: 'Expert Teachers!',
-  hero_lead: 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes — we match each one with a vetted teacher.',
+  hero_lead: 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes, and we’ll match each one with a vetted teacher.',
   hero_primary_label: 'Book a free trial',
   hero_secondary_label: 'How it works',
   proof_text: 'Loved by parents worldwide',
@@ -30,16 +30,16 @@ export const home = {
 
   steps_title: 'Start *Learning* in 3 Simple Steps',
   steps: [
-    { title: 'Register Your Child', text: 'Fill one form for all your children — subjects, ages and the times that suit your family.' },
+    { title: 'Register Your Child', text: 'Fill one form for all your children: subjects, ages and the times that suit your family.' },
     { title: 'We Match a Teacher', text: 'Our team reviews each request and assigns a qualified teacher for every subject.' },
     { title: 'Start Learning', text: 'Join a free trial class live online, then choose the plan that fits.' },
   ],
 
   benefits_title: 'Our Benefits',
-  benefits_intro: 'Experienced educators, live classrooms and a curriculum built around each child — so they build a strong foundation for the future.',
+  benefits_intro: 'Experienced educators, live classrooms and a curriculum built around each child, so they build a strong foundation for the future.',
   // icon: a key of BENEFIT_ICONS; color: a key of BENEFIT_COLORS (src/lib/ui.ts)
   benefits: [
-    { title: 'Holistic Learning', text: 'Lessons that build understanding, confidence and study habits — not just test scores.', icon: 'graduation', color: 'orange' },
+    { title: 'Holistic Learning', text: 'Lessons that build understanding, confidence and study habits, not just test scores.', icon: 'graduation', color: 'orange' },
     { title: 'Experienced Educators', text: 'Every teacher is vetted for subject expertise and experience teaching children online.', icon: 'award', color: 'amber' },
     { title: 'Safe, Nurturing Classes', text: 'Supervised virtual classrooms with clear safeguarding standards for every session.', icon: 'shield', color: 'blue' },
     { title: 'Science, Commercial & Arts', text: 'From early phonics to exam-level Physics, Accounting and Literature.', icon: 'flask', color: 'green' },
@@ -51,7 +51,7 @@ export const home = {
   enrol_intro: "One form for the whole family. We'll review it and assign a teacher within 48 hours.",
 
   teach_title: 'Share Your *Knowledge*\nWith Learners Worldwide',
-  teach_text: 'Are you a qualified teacher in a Science, Commercial or Arts subject? Join Likulearn to teach live online classes — we handle enrolment, matching and scheduling so you can focus on teaching.',
+  teach_text: 'Are you a qualified teacher in a Science, Commercial or Arts subject? Join Likulearn to teach live online classes. We handle enrolment, matching and scheduling so you can focus on teaching.',
   teach_perks: ['Global reach', 'Flexible schedule', 'Ready-made enrolments', 'Fair, on-time pay'],
   teach_cta_label: 'Apply to teach',
   teach_cta_url: 'mailto:hello@likulearn.com?subject=Teaching%20at%20Likulearn',
@@ -80,7 +80,7 @@ export const home = {
 export type Home = typeof home;
 
 export const testimonials = [
-  { name: 'Parent name', role: 'Mother of two', quote: 'Both my kids are in different time zones from their old school — Likulearn found teachers that fit our week perfectly.' },
+  { name: 'Parent name', role: 'Mother of two', quote: 'Both my kids are in different time zones from their old school, but Likulearn found teachers that fit our week perfectly.' },
   { name: 'Parent name', role: 'Father, Year 10 student', quote: 'My son’s Chemistry grade went up a full band in one term. The teacher sends notes after every lesson.' },
   { name: 'Parent name', role: 'Mother, age 6', quote: 'The phonics classes are playful and short enough to hold her attention. She asks when the next one is.' },
 ];
@@ -108,7 +108,7 @@ export const posts: Post[] = [
     cover_credit: 'Photo by Brett Jordan on Unsplash',
     cover_credit_url: 'https://unsplash.com/@brett_jordan',
     body: [
-      'Young children learn best when they are active. Short games — matching sounds to letters, racing to solve a sum, building a word from scrambled tiles — turn practice into something they want to repeat.',
+      'Young children learn best when they are active. Short games (matching sounds to letters, racing to solve a sum, building a word from scrambled tiles) turn practice into something they want to repeat.',
       'In our online classes, teachers mix quick games with explanation and calm practice, so attention stays high without lessons becoming chaotic.',
       'At home, you can do the same: keep activities short, celebrate effort, and stop while your child is still enjoying it.',
     ],

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+---
+<BaseLayout title="Page not found | Likulearn" noindex>
+  <PageBand eyebrow="404" title="We couldn’t find that page" lead="It may have moved, or the link may be mistyped." />
+  <section class="section links">
+    <a href="/" class="btn btn-orange">Go to the homepage</a>
+    <a href="/blog" class="btn">Read the blog</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+</style>

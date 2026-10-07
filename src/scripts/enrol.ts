@@ -67,7 +67,7 @@ interface RenderOpts {
 const STEPS = [
   { id: 'parent', label: 'Parent', title: 'About you', sub: 'We’ll send your trial class details here.' },
   { id: 'kids', label: 'Children', title: 'Your children', sub: 'Add each child and the subjects they’d like help with.' },
-  { id: 'plan', label: 'Plan', title: 'Choose a plan', sub: 'The trial is free and needs no card. Pick how you’d like to continue afterwards — you can change it anytime.' },
+  { id: 'plan', label: 'Plan', title: 'Choose a plan', sub: 'The trial is free and needs no card. Pick how you’d like to continue afterwards. You can change it anytime.' },
   { id: 'review', label: 'Review', title: 'Check and submit', sub: 'Make sure everything looks right. You can edit any section.' },
 ] as const;
 type StepId = typeof STEPS[number]['id'];
@@ -128,10 +128,10 @@ function stepErrors(s: State, id: StepId): Record<string, string> {
     const p = s.parent;
     if (!p.name.trim()) e['parent.name'] = 'Please enter your name.';
     if (!p.email.trim()) e['parent.email'] = 'Please enter your email address.';
-    else if (!EMAIL_RE.test(p.email.trim())) e['parent.email'] = 'That email doesn’t look right — check for typos.';
+    else if (!EMAIL_RE.test(p.email.trim())) e['parent.email'] = 'That email doesn’t look right. Check for typos.';
     const digits = p.phone.replace(/\D/g, '');
     if (!p.phone.trim()) e['parent.phone'] = 'Please enter a phone or WhatsApp number.';
-    else if (digits.length < 7) e['parent.phone'] = 'That number looks too short — include the country code.';
+    else if (digits.length < 7) e['parent.phone'] = 'That number looks too short. Include the country code.';
   }
   if (id === 'kids') s.kids.forEach((k, i) => Object.assign(e, kidErrors(k, i)));
   return e;
@@ -181,7 +181,7 @@ function saveDraft(s: State) {
     if (s.submitted || !hasContent) { localStorage.removeItem(DRAFT_KEY); return; }
     const { step, maxStep, parent, kids, plan } = s;
     localStorage.setItem(DRAFT_KEY, JSON.stringify({ step, maxStep, parent, kids, plan, savedAt: Date.now() }));
-  } catch { /* storage unavailable (private mode) — the form still works */ }
+  } catch { /* storage unavailable (private mode); the form still works */ }
 }
 
 /* ---------------- form ---------------- */
@@ -332,7 +332,7 @@ export function initEnrolForm(
 
   function renderReview() {
     const { parent, kids, plan } = state;
-    const planTitle = (PLANS.find((p) => p.id === plan) ?? PLANS[0])?.title ?? '—';
+    const planTitle = (PLANS.find((p) => p.id === plan) ?? PLANS[0])?.title ?? 'Not chosen';
     const edit = (step: number, label: string, kid?: number) =>
       `<button type="button" class="edit-btn" data-action="edit" data-value="${step}"${kid != null ? ` data-target="${kid}"` : ''} aria-label="Edit ${esc(label)}">Edit</button>`;
     return `<div class="review">
@@ -343,7 +343,7 @@ export function initEnrolForm(
         <p class="sub">${esc(parent.tz)}</p>
       </section>
       ${kids.map((k, i) => `<section class="review-box">
-        <div class="rb-head"><h4>${esc(k.name || `Child ${i + 1}`)} <span class="rb-age">· age ${esc(k.age || '—')}${k.grade ? ` · ${esc(k.grade)}` : ''}</span></h4>${edit(1, k.name || `child ${i + 1}`, i)}</div>
+        <div class="rb-head"><h4>${esc(k.name || `Child ${i + 1}`)} <span class="rb-age">${k.age ? ` · age ${esc(k.age)}` : ''}${k.grade ? ` · ${esc(k.grade)}` : ''}</span></h4>${edit(1, k.name || `child ${i + 1}`, i)}</div>
         <div class="rb-tags">${k.subjects.map((s) => `<span class="rb-tag">${esc(s)}</span>`).join('')}</div>
         <p class="sub">${esc(k.type)} · ${esc(k.days.length ? k.days.join(', ') : 'Any day')} · ${esc(k.time)}${k.teacher !== 'No preference' ? ` · ${esc(k.teacher)}` : ''}</p>
         ${k.goals ? `<p class="sub">“${esc(k.goals)}”</p>` : ''}
@@ -367,7 +367,7 @@ export function initEnrolForm(
       <ol class="next-steps">
         <li><span>1</span><div><strong>We match a teacher</strong><small>Within 48 hours, for every subject.</small></div></li>
         <li><span>2</span><div><strong>You get the trial time</strong><small>Sent to ${esc(parent.email)}.</small></div></li>
-        <li><span>3</span><div><strong>Join the live class</strong><small>Free — then pick the plan that fits.</small></div></li>
+        <li><span>3</span><div><strong>Join the live class</strong><small>Free, then pick the plan that fits.</small></div></li>
       </ol>
       <button type="button" class="btn btn-outline-green" data-action="reset">Register another family</button>
     </div>`;
@@ -423,7 +423,7 @@ export function initEnrolForm(
       <form class="form-body" novalidate>
         <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
         ${state.restored ? `<div class="restore-bar" role="status">
-          <span>Welcome back — we kept your progress.</span>
+          <span>Welcome back! We kept your progress.</span>
           <button type="button" class="link" data-action="start-over">Start over</button>
           <button type="button" class="icon-x" data-action="dismiss-restore" aria-label="Dismiss">${ICON.close}</button>
         </div>` : ''}
@@ -681,7 +681,7 @@ export function initEnrolForm(
   root.addEventListener('input', onFieldInput);
   root.addEventListener('change', onFieldInput);
 
-  // Check a field when the user leaves it — but don't nag about empty fields they're just tabbing past.
+  // Check a field when the user leaves it, but don't nag about empty fields they're just tabbing past.
   root.addEventListener('focusout', (ev) => {
     const el = ev.target as HTMLInputElement;
     if (!el.matches?.('input, textarea')) return;

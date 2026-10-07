@@ -8,6 +8,10 @@ export default defineConfig({
   // Every page is prerendered to static HTML and served by Cloudflare as a plain asset.
   // Only the form endpoints in src/pages/api/ run on the Worker (they set `prerender = false`).
   output: 'static',
+  // One URL per page: /blog (built as blog.html), never /blog/. Matches the nav links and
+  // canonical tags; Cloudflare serves foo.html at /foo and redirects /foo/ to it.
+  trailingSlash: 'never',
+  build: { format: 'file' },
   adapter: cloudflare({
     // Images are served straight from their source (Unsplash sizes them via URL params).
     imageService: 'passthrough',

@@ -7,19 +7,41 @@ import { home } from '../data/content';
 interface Props {
   title: string;
   description?: string;
-  /** Absolute or root-relative image for link previews. */
+  /** Absolute or root-relative image for link previews. Defaults to the hero photo. */
   image?: string | null;
+  imageAlt?: string;
+  /** 'article' for blog posts. */
+  type?: 'website' | 'article';
+  /** ISO date, for articles. */
+  publishedTime?: string;
+  /** Schema.org objects for this page, emitted as JSON-LD. */
+  schema?: Record<string, unknown>[];
+  /** Keep the page out of search results (e.g. 404). */
+  noindex?: boolean;
 }
 
 const {
   title,
   description = 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes and book a free trial class.',
-  image,
+  image = home.hero_image.src,
+  imageAlt = image === home.hero_image.src ? home.hero_image.alt : undefined,
+  type = 'website',
+  publishedTime,
+  schema = [],
+  noindex = false,
 } = Astro.props;
 
-const ogImage = image ? new URL(image, Astro.site ?? Astro.url.origin).href : null;
+const base = Astro.site ?? Astro.url.origin;
+const ogImage = image ? new URL(image, base).href : null;
 
-const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+// No trailing slash (see trailingSlash in astro.config.mjs), except the root.
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/').replace(/(.)\/$/, '$1');
+const canonical = new URL(path, base).href;
+
+// `<` escaped so text in the data can never close the script tag.
+const jsonLd = schema.length
+  ? JSON.stringify({ '@context': 'https://schema.org', '@graph': schema }).replace(/</g, '\\u003c')
+  : null;
 ---
 <!doctype html>
 <html lang="en">
@@ -28,17 +50,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).hr
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title="Likulearn Blog" href="/rss.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <meta name="theme-color" content="#0E3B36" />
     <meta property="og:site_name" content="Likulearn" />
-    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -117,7 +117,7 @@ figure:hover .credit, .credit:focus-within { opacity: 1; }
 .credit a, .credit a:hover { color: #fff; }
 
 /* Images fade in once loaded (class set by the layout script). Zero specificity so
-   components can add their own transitions — they should keep `opacity` in the list. */
+   components can add their own transitions; they should keep `opacity` in the list. */
 :where(html.js-motion img.fade-img) { opacity: 0; transition: opacity 600ms ease; }
 :where(html.js-motion img.fade-img.loaded) { opacity: 1; }
 
