@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Steps from '../components/Steps.astro';
+import Testimonials from '../components/Testimonials.astro';
+import { home, testimonials } from '../data/content';
+import { breadcrumbs } from '../lib/seo';
+---
+<BaseLayout
+  title="How Likulearn Online Classes Work | Likulearn"
+  description="Register your children, get matched with a vetted teacher within 48 hours and start live online classes. See how Likulearn works for ages 3–18."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'How it works', path: '/how-it-works' }])]}
+>
+  <PageBand eyebrow="How it works" title="How Likulearn Works" lead="From one short form to your child’s first live class, here is what happens at each step." />
+  <Steps title={home.steps_title} steps={home.steps} />
+  <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+</BaseLayout>

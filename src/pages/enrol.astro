@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import EnrolForm from '../components/EnrolForm.astro';
+import { home, plans, subjects } from '../data/content';
+import { breadcrumbs } from '../lib/seo';
+---
+<BaseLayout
+  title="Enrol Your Child: Book a Free Trial Class | Likulearn"
+  description="Register your children for live online classes in minutes. One form for the whole family, no card needed, and a teacher assigned within 48 hours."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Enrol', path: '/enrol' }])]}
+>
+  <PageBand eyebrow="Enrol" title="Enrol Your Child at Likulearn" lead={home.enrol_intro} />
+  <EnrolForm title={home.enrol_title} plans={plans} subjects={subjects} />
+</BaseLayout>

@@ -1,5 +1,5 @@
 /** Schema.org (JSON-LD) objects for BaseLayout's `schema` prop. */
-import { home, type Post } from '../data/content';
+import { home, type Faq, type Post } from '../data/content';
 
 export const SITE_URL = 'https://likulearn.com';
 const abs = (path: string) => new URL(path, SITE_URL).href;
@@ -46,4 +46,13 @@ export const blogPosting = (post: Post) => ({
   inLanguage: 'en',
   author: { '@id': ORG_ID },
   publisher: organization(),
+});
+
+export const faqPage = (faqs: Faq[]) => ({
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
 });

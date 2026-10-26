@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Teach from '../components/Teach.astro';
+import { home } from '../data/content';
+import { breadcrumbs } from '../lib/seo';
+---
+<BaseLayout
+  title="Teach Online with Likulearn: Tutor Jobs | Likulearn"
+  description="Qualified in a Science, Commercial or Arts subject? Teach live online classes with Likulearn. Flexible hours, ready-made enrolments and fair, on-time pay."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Teach', path: '/teach' }])]}
+>
+  <PageBand eyebrow="Teach with us" title="Teach Online with Likulearn" lead="We handle enrolment, matching and scheduling, so you can focus on teaching." />
+  <Teach home={home} />
+</BaseLayout>

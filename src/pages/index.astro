@@ -6,8 +6,9 @@ import Benefits from '../components/Benefits.astro';
 import EnrolForm from '../components/EnrolForm.astro';
 import Teach from '../components/Teach.astro';
 import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
 import Blog from '../components/Blog.astro';
-import { home, plans, sortedPosts, subjects, testimonials } from '../data/content';
+import { faq_intro, faq_title, faqs, home, plans, sortedPosts, subjects, testimonials } from '../data/content';
 import { organization, website } from '../lib/seo';
 ---
 <BaseLayout title="Live Online Classes for Kids Aged 3–18 | Likulearn" schema={[organization(), website()]}>
@@ -17,5 +18,6 @@ import { organization, website } from '../lib/seo';
   <EnrolForm title={home.enrol_title} intro={home.enrol_intro} plans={plans} subjects={subjects} />
   <Teach home={home} />
   <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+  <Faq title={faq_title} intro={faq_intro} email={home.contact_email} faqs={faqs} />
   <Blog title={home.blog_title} posts={sortedPosts.slice(0, 3)} />
 </BaseLayout>

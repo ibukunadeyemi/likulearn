@@ -7,6 +7,11 @@ export const GET: APIRoute = () => {
   const latest = sortedPosts[0]?.date;
   const urls = [
     { path: '/', lastmod: latest },
+    { path: '/how-it-works' },
+    { path: '/why-likulearn' },
+    { path: '/enrol' },
+    { path: '/teach' },
+    { path: '/faq' },
     { path: '/blog', lastmod: latest },
     { path: '/privacy', lastmod: '2026-10-26' },
     { path: '/terms', lastmod: '2026-10-26' },

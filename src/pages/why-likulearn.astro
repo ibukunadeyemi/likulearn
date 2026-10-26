@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Benefits from '../components/Benefits.astro';
+import Testimonials from '../components/Testimonials.astro';
+import { home, testimonials } from '../data/content';
+import { breadcrumbs } from '../lib/seo';
+---
+<BaseLayout
+  title="Why Parents Choose Likulearn for Online Tutoring | Likulearn"
+  description="Experienced teachers, live classrooms and lessons built around each child. See why parents choose Likulearn for online classes for ages 3–18."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Why Likulearn', path: '/why-likulearn' }])]}
+>
+  <PageBand eyebrow="Why Likulearn" title="Why Parents Choose Likulearn" lead={home.benefits_intro} />
+  <Benefits benefits={home.benefits} />
+  <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+</BaseLayout>

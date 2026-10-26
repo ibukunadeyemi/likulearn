@@ -8,7 +8,7 @@ const { home } = Astro.props;
 <header class="hero grid-bg" id="top">
   <div class="hero-body">
     {home.hero_badge && (
-      <a href="#enrol" class="pill-link">
+      <a href="/enrol" class="pill-link">
         {home.hero_badge}
         <span>Book now →</span>
       </a>
@@ -23,8 +23,8 @@ const { home } = Astro.props;
     </h1>
     {home.hero_lead && <p class="hero-lead">{home.hero_lead}</p>}
     <div class="hero-ctas">
-      <a href="#enrol" class="btn btn-white">{home.hero_primary_label || 'Book a free trial'}</a>
-      <a href="#how" class="btn btn-ghost">
+      <a href="/enrol" class="btn btn-white">{home.hero_primary_label || 'Book a free trial'}</a>
+      <a href="/how-it-works" class="btn btn-ghost">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3" /></svg>{home.hero_secondary_label || 'How it works'}
       </a>
     </div>

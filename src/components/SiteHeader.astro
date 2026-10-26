@@ -1,5 +1,9 @@
 ---
 import { NAV_LINKS } from '../data/site';
+
+// Each menu item is its own page; blog posts count as the Blog page.
+const here = Astro.url.pathname.replace(/\.html$/, '').replace(/(.)\/$/, '$1');
+const isCurrent = (href: string) => here === href || here.startsWith(href + '/');
 ---
 <header id="site-nav">
   <div class="nav-shell">
@@ -7,10 +11,10 @@ import { NAV_LINKS } from '../data/site';
       <img src="/logo-dark.svg" alt="" width="140" height="39" />
     </a>
     <nav class="nav-links" aria-label="Main">
-      {NAV_LINKS.map((l) => <a href={l.href} data-spy={l.href.split('#')[1]}>{l.label}</a>)}
+      {NAV_LINKS.map((l) => <a href={l.href} class:list={{ active: isCurrent(l.href) }} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="nav-actions">
-      <a href="/#enrol" class="btn btn-orange btn-sm">Enrol your child</a>
+      <a href="/enrol" class="btn btn-orange btn-sm">Enrol your child</a>
       <button type="button" id="menu-toggle" class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
@@ -18,9 +22,9 @@ import { NAV_LINKS } from '../data/site';
   </div>
   <!-- Small-screen menu: everything the desktop nav shows, in a dropdown panel. -->
   <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
-    {NAV_LINKS.map((l) => <a href={l.href}>{l.label}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>)}
+    {NAV_LINKS.map((l) => <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>)}
     <div class="mobile-menu-actions">
-      <a href="/#enrol" class="btn btn-orange">Enrol your child</a>
+      <a href="/enrol" class="btn btn-orange">Enrol your child</a>
     </div>
   </nav>
 </header>
@@ -64,17 +68,6 @@ import { NAV_LINKS } from '../data/site';
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) { setMenu(false); menuBtn.focus(); } });
   document.addEventListener('click', (e) => { if (isOpen && !nav.contains(e.target as Node)) setMenu(false); });
   window.matchMedia('(min-width: 821px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
-
-  // Highlight the nav link for the section currently in view.
-  const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-spy]')].filter((a) => a.dataset.spy);
-  const sections = links.map((a) => document.getElementById(a.dataset.spy!)).filter((s): s is HTMLElement => !!s);
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      links.forEach((a) => a.classList.toggle('active', a.dataset.spy === e.target.id));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach((s) => spy.observe(s));
 </script>
 
 <style>
