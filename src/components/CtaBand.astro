@@ -1,0 +1,20 @@
+---
+/** Closing call to action on inner pages. */
+interface Props { title: string; text?: string | null; label: string; href: string }
+const { title, text, label, href } = Astro.props;
+---
+<section class="section cta-section">
+  <div class="cta-card grid-bg" data-reveal="zoom">
+    <h2>{title}</h2>
+    {text && <p>{text}</p>}
+    <a href={href} class="btn btn-orange">{label}<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
+  </div>
+</section>
+
+<style>
+  .cta-section { padding-top: 0; }
+  .cta-card { border-radius: 24px; padding: 56px 32px; text-align: center; overflow: hidden; }
+  h2 { margin: 0 auto 28px; max-width: 640px; color: #fff; font-size: clamp(24px, 3vw, 34px); font-weight: 500; line-height: 1.25; text-wrap: balance; }
+  p { margin: -14px auto 28px; max-width: 560px; color: rgba(255,255,255,.75); font-size: 16px; line-height: 1.6; }
+  @media (max-width: 720px) { .cta-card { padding: 44px 20px; border-radius: 18px; } }
+</style>

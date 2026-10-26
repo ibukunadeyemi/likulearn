@@ -1,0 +1,25 @@
+---
+/** Subjects grouped by track, as chips. Sits inside ProseBlock copy. */
+import type { SubjectGroup } from '../data/content';
+
+interface Props { subjects: SubjectGroup[] }
+const { subjects } = Astro.props;
+---
+<div class="subject-groups">
+  {subjects.map((g) => (
+    <div>
+      <p class="label">{g.label}</p>
+      <ul class="chips">{g.items.map((s) => <li>{s}</li>)}</ul>
+    </div>
+  ))}
+</div>
+
+<style>
+  .subject-groups { display: grid; gap: 16px; margin: 4px 0 1.4em; }
+  .label { margin: 0 0 8px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li {
+    padding: 6px 12px; border-radius: 999px; background: #fff; border: 1.5px solid var(--line-warm);
+    font-size: 14px; line-height: 1.3; color: var(--ink);
+  }
+</style>

@@ -46,6 +46,9 @@ export const home = {
     { title: 'Science, Commercial & Arts', text: 'From early phonics to exam-level Physics, Accounting and Literature.', icon: 'flask', color: 'green' },
     { title: 'Individual Attention', text: '1-on-1 or small groups, paced to each child and adjusted as they grow.', icon: 'person', color: 'lime' },
     { title: 'Parent Involvement', text: 'Regular progress updates and a direct line to your child’s teacher.', icon: 'family', color: 'red' },
+    { title: 'AI-Assisted Learning', text: 'Teachers use AI tools to tailor practice to each child’s level, while a real teacher leads every lesson.', icon: 'sparkles', color: 'blue' },
+    { title: 'Flexible Scheduling', text: 'Choose the days and times that suit your family, morning, afternoon or evening.', icon: 'clock', color: 'amber' },
+    { title: 'Learn From Anywhere', text: 'Families join from many time zones. All your child needs is a device and a quiet space.', icon: 'globe', color: 'green' },
   ],
 
   enrol_title: 'Register Your Child for a *Free Trial*',
@@ -166,6 +169,8 @@ export const subjects: SubjectGroup[] = [
 /* ---------- FAQ ---------- */
 
 export interface Faq {
+  /** Lets a page show just the questions that fit it, with faqsById. */
+  id: string;
   q: string;
   a: string;
   /** Optional link shown after the answer. */
@@ -179,51 +184,66 @@ export const faq_intro = 'Everything parents usually ask before booking a free t
 
 export const faqs: Faq[] = [
   {
+    id: 'ages-subjects',
     q: 'What ages and subjects do you teach?',
     a: 'We teach children aged 3 to 18. Younger learners start with phonics, reading, early numeracy and handwriting. Older students can take Science subjects (including Mathematics, Physics, Chemistry and Biology), Commercial subjects (such as Accounting and Economics) and Arts subjects (such as English, Literature and French), right up to exam level.',
   },
   {
+    id: 'free-trial',
     q: 'How does the free trial work?',
     a: 'Every new learner gets one free 45-minute class, and no card is needed. Register your children with the form, and within 48 hours our team will match each child with a teacher and email you to arrange a time. There is no obligation to continue afterwards.',
     link: { label: 'Book a free trial', href: '/enrol' },
   },
   {
+    id: 'cost',
     q: 'How much do classes cost?',
     a: paidPlans + ' We confirm the exact price for your child’s subjects in writing before you pay anything.',
   },
   {
+    id: 'class-size',
     q: 'Are classes 1-on-1 or in groups?',
     a: 'Both. You choose for each child: 1-on-1 lessons paced entirely around them, or small groups with children at a similar level.',
   },
   {
+    id: 'teachers-safety',
     q: 'Who are the teachers, and are classes safe?',
     a: 'Every teacher is vetted for subject expertise and experience teaching children online. Classes run in supervised virtual classrooms with clear safeguarding standards, and we recommend an adult stays nearby during lessons for younger children.',
   },
   {
+    id: 'equipment',
     q: 'What does my child need to join a class?',
     a: 'A laptop or tablet with a camera and microphone, a stable internet connection and a quiet place to sit. Headphones help a lot. We send everything else you need before the first class.',
     link: { label: 'Tips for a home learning space', href: '/blog/home-learning-space' },
   },
   {
+    id: 'outside-nigeria',
     q: 'We live outside Nigeria. Can we still join?',
     a: 'Yes. Families join from many time zones. Tell us your time zone and the days and times that suit you, and we match your child with a teacher who can teach then.',
   },
   {
+    id: 'siblings',
     q: 'Can I register more than one child?',
     a: 'Yes. One form covers the whole family, with up to ' + MAX_CHILDREN + ' children. Each child gets their own subjects, schedule and teacher.',
   },
   {
+    id: 'progress',
     q: 'How will I know how my child is doing?',
     a: 'You get regular progress updates and a direct line to your child’s teacher. Monthly plans also include written progress reports.',
   },
   {
+    id: 'cancel',
     q: 'Can I change or cancel a plan?',
     a: 'After the free trial you are under no obligation. For paid plans, the rescheduling and cancellation terms are set out in the written confirmation you receive before paying.',
     link: { label: 'Read our terms', href: '/terms' },
   },
   {
+    id: 'teachers-apply',
     q: 'I’m a teacher. How can I join Likulearn?',
     a: 'We are always looking for qualified Science, Commercial and Arts teachers. Email us with your subjects and experience, and we’ll be in touch.',
     link: { label: 'Apply to teach', href: '/teach' },
   },
 ];
+
+/** The FAQs with these ids, in the order given. */
+export const faqsById = (...ids: string[]) =>
+  ids.map((id) => faqs.find((f) => f.id === id)).filter((f): f is Faq => !!f);

@@ -2,9 +2,23 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageBand from '../components/PageBand.astro';
 import Steps from '../components/Steps.astro';
+import InfoGrid from '../components/InfoGrid.astro';
+import ProseBlock from '../components/ProseBlock.astro';
+import PlanCards from '../components/PlanCards.astro';
 import Testimonials from '../components/Testimonials.astro';
-import { home, testimonials } from '../data/content';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqsById, home, plans, testimonials } from '../data/content';
 import { breadcrumbs } from '../lib/seo';
+
+const details = [
+  { title: 'Fill in one form', text: 'Tell us about yourself and each child: their age, school year, the subjects they need, 1-on-1 or small group, and the days and times that suit you. It takes about two minutes, and your progress is saved as you go.' },
+  { title: 'We read every request', text: 'A member of our team reviews each registration personally. We look at your child’s age, level and goals, not just the subject name, so the match makes sense from the first lesson.' },
+  { title: 'A teacher for every subject', text: 'Within 48 hours, each subject is matched with a vetted teacher who knows it well and has experience teaching children online. If you asked for a female or male teacher, we take that into account.' },
+  { title: 'The trial time, by email', text: 'We email you the date and time of your child’s free trial class, arranged around the schedule and time zone you gave us.' },
+  { title: 'A free 45-minute live class', text: 'The trial is a real lesson, not a sales call. The teacher gets to know your child, finds out where they are, and teaches something useful from the first few minutes.' },
+  { title: 'Choose a plan, or don’t', text: 'After the trial, pick pay as you go or a monthly plan for the subjects you want, or stop there. There is no obligation, and no card is needed to book the trial.' },
+];
 ---
 <BaseLayout
   title="How Likulearn Online Classes Work | Likulearn"
@@ -13,5 +27,45 @@ import { breadcrumbs } from '../lib/seo';
 >
   <PageBand eyebrow="How it works" title="How Likulearn Works" lead="From one short form to your child’s first live class, here is what happens at each step." />
   <Steps title={home.steps_title} steps={home.steps} />
+
+  <InfoGrid
+    tone="cream"
+    numbered
+    title="Each Step *in Detail*"
+    intro="Exactly what happens between filling in the form and your child’s first lesson with their new teacher."
+    items={details}
+  />
+
+  <ProseBlock eyebrow="Inside a lesson" title="What a Live Online Class *Looks Like*">
+    <p>Every Likulearn class is taught live by a real teacher over video. Your child can see and hear their teacher, ask questions the moment they get stuck, and get instant feedback on their work. There are no pre-recorded videos to sit through alone.</p>
+    <p>Lessons are planned around your child. The teacher explains a new idea, works through examples together with them, then lets them practise while watching how they get on. Because the teacher can see exactly where your child hesitates, they can slow down, try a different explanation or move on when your child is ready.</p>
+    <h3>For younger learners (ages 3 to 7)</h3>
+    <p>Classes for early years mix short, focused teaching with songs, games and hands-on activities, so attention stays high. Phonics, early reading, numeracy and handwriting are built up little by little, with lots of praise along the way. You can read more about <a href="/blog/learning-with-games">why learning with games works</a>.</p>
+    <h3>For older students (ages 8 to 18)</h3>
+    <p>Older students work through topics in more depth, with worked examples, practice questions and, closer to exams, past-paper style questions and exam technique. Teachers help them understand the reasoning behind each answer, not just memorise steps.</p>
+    <h3>What your child needs</h3>
+    <ul class="ticks">
+      <li>A laptop or tablet with a camera and microphone</li>
+      <li>A stable internet connection</li>
+      <li>A quiet place to sit, ideally with headphones</li>
+      <li>A notebook and pencil</li>
+    </ul>
+    <p>We send everything else you need before the first class. For more ideas, see our guide to <a href="/blog/home-learning-space">setting up a home learning space</a>.</p>
+  </ProseBlock>
+
+  <ProseBlock tone="cream" eyebrow="After the trial" title="Staying on Track, *Lesson After Lesson*">
+    <p>Once your child starts regular classes, they usually keep the same teacher for each subject. That continuity matters: the teacher learns how your child thinks, what motivates them and where they need extra support.</p>
+    <p>You get regular progress updates and a direct line to the teacher, so you always know what your child is working on and how they are doing. Monthly plans also include written progress reports.</p>
+    <p>If your family’s schedule changes, or your child is ready for a new subject, just tell us. You can add subjects, change days and times, or register a brother or sister at any point.</p>
+  </ProseBlock>
+
+  <PlanCards title="Simple, *Flexible* Plans" intro="Every new learner starts with a free trial class. After that, choose the plan that fits your family." plans={plans} />
   <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+  <Faq
+    title="Questions About *Getting Started*"
+    intro="The questions parents ask most before their child’s first class."
+    email={home.contact_email}
+    faqs={faqsById('free-trial', 'cost', 'equipment', 'siblings', 'outside-nigeria', 'cancel')}
+  />
+  <CtaBand title="Ready to Book Your Child’s Free Trial?" text="One form for the whole family. We’ll match a teacher within 48 hours." label="Enrol your child" href="/enrol" />
 </BaseLayout>

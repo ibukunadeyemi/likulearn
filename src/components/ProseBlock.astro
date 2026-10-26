@@ -1,0 +1,53 @@
+---
+/** Long-form text for inner pages: heading on the left, readable copy on the right. */
+import Rich from './Rich.astro';
+
+interface Props {
+  eyebrow?: string | null;
+  title: string;
+  /** 'cream' gives the block a full-width tinted background. */
+  tone?: 'white' | 'cream';
+  id?: string;
+}
+const { eyebrow, title, tone = 'white', id } = Astro.props;
+---
+<div class:list={['prose-wrap', tone]} id={id}>
+  <section class="section prose-block">
+    <div class="prose-head" data-reveal>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h2><Rich text={title} /></h2>
+    </div>
+    <div class="prose" data-reveal>
+      <slot />
+    </div>
+  </section>
+</div>
+
+<style>
+  .prose-wrap.cream { background: var(--cream); }
+  .prose-block { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
+  .prose-head { position: sticky; top: 110px; }
+  .eyebrow { margin: 0 0 10px; color: var(--orange); font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  h2 { margin: 0; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; line-height: 1.25; letter-spacing: -.01em; text-wrap: balance; }
+
+  .prose { font-size: 16px; line-height: 1.75; color: #2A3836; }
+  .prose :global(p), .prose :global(ul) { margin: 0 0 1.1em; }
+  .prose > :global(:last-child) { margin-bottom: 0; }
+  .prose :global(h3) { margin: 32px 0 8px; font-size: 19px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+  .prose :global(h3:first-child) { margin-top: 0; }
+  .prose :global(ul.ticks) { list-style: none; padding: 0; }
+  .prose :global(ul.ticks li) { position: relative; padding-left: 28px; margin-bottom: .55em; }
+  .prose :global(ul.ticks li::before) {
+    content: ""; position: absolute; left: 3px; top: .6em; width: 9px; height: 9px; border-radius: 2px;
+    background: var(--orange); transform: rotate(45deg);
+  }
+  .prose :global(strong) { color: var(--ink); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .prose-block { grid-template-columns: 1fr; gap: 24px; }
+    .prose-head { position: static; }
+  }
+  @media (max-width: 720px) {
+    .prose { font-size: 15px; }
+  }
+</style>
