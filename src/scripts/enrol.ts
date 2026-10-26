@@ -2,10 +2,10 @@ import { CLASS_TYPES, TIMES, DAYS, TIMEZONES, AGES, TEACHER_PREFS, MAX_CHILDREN 
 import type { Plan, SubjectGroup } from '../data/content';
 import { animate, stagger, motionOn, settle, easeOut } from './motion';
 
-// Registrations are saved to the "Registrations" collection in the CMS (src/pages/api/enrol.ts).
+// Registrations are saved to the registrations table in D1 (src/pages/api/enrol.ts).
 const ENROL_ENDPOINT = '/api/enrol';
 
-// Plans and subjects are edited in the CMS; the page passes them in (see initEnrolForm).
+// Plans and subjects are edited in src/data/content.ts; the page passes them in (see initEnrolForm).
 let PLANS: Plan[] = [];
 let SUBJECTS: SubjectGroup[] = [];
 
@@ -161,7 +161,7 @@ function loadDraft(): State | null {
       step,
       maxStep: Math.min(Math.max(Number(d.maxStep) || step, step), STEPS.length - 1),
       parent: { ...base.parent, ...d.parent },
-      // Drop subjects that have since been renamed or removed in the CMS.
+      // Drop subjects that have since been renamed or removed in content.ts.
       kids: d.kids.slice(0, MAX_CHILDREN).map((k: Partial<Kid>) => {
         const kid = { ...newKid(), ...k };
         const known = SUBJECTS.flatMap((g) => g.items);
@@ -352,7 +352,7 @@ export function initEnrolForm(
         <div class="rb-head"><h4>Plan: ${esc(planTitle)}</h4>${edit(2, 'plan')}</div>
         <p class="sub">Every child starts with a free trial class.</p>
       </section>
-      <p class="consent">By submitting, you agree that Likulearn may contact you about your trial by email or WhatsApp.</p>
+      <p class="consent">By submitting, you agree that Likulearn may contact you about your trial by email, and that we handle your details as set out in our <a href="/privacy" target="_blank">Privacy Policy</a>.</p>
     </div>`;
   }
 

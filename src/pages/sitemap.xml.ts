@@ -8,6 +8,8 @@ export const GET: APIRoute = () => {
   const urls = [
     { path: '/', lastmod: latest },
     { path: '/blog', lastmod: latest },
+    { path: '/privacy', lastmod: '2026-10-26' },
+    { path: '/terms', lastmod: '2026-10-26' },
     ...sortedPosts.map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.date })),
   ];
   const body = `<?xml version="1.0" encoding="UTF-8"?>

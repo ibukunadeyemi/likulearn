@@ -1,0 +1,63 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { home } from '../data/content';
+
+const email = home.contact_email;
+const mailto = 'mailto:' + email;
+---
+<LegalPage
+  title="Privacy Policy"
+  description="What we collect when you register your children or join our mailing list, why we need it, and how to see or delete it."
+  path="/privacy"
+  updated="2026-10-26"
+>
+  <h2>Who we are</h2>
+  <p>Likulearn (likulearn.com) arranges live online classes for children aged 3 to 18. This policy explains how we handle personal information collected through this website. If you have any question about it, email <a href={mailto}>{email}</a>.</p>
+
+  <h2>What we collect</h2>
+  <p><strong>When you register for a free trial</strong>, we collect:</p>
+  <ul>
+    <li>Your name, email address, phone number and time zone.</li>
+    <li>For each child: their name, age, school year, the subjects they need, whether they want 1-on-1 or group classes, preferred days and times, any teacher preference, and anything you tell us about their goals.</li>
+    <li>The plan you are interested in.</li>
+  </ul>
+  <p><strong>When you join our mailing list</strong>, we collect your email address.</p>
+  <p><strong>To protect the forms from abuse</strong>, we store a one-way, salted fingerprint of your IP address with each registration. It lets us limit repeated submissions; we never store the IP address itself. Our hosting provider also keeps short-lived technical logs for security and reliability.</p>
+
+  <h2>Information about children</h2>
+  <p>We only collect children's details from a parent or guardian, through the registration form. Children should not fill in the form themselves. If you believe a child has sent us information without a parent's involvement, contact us and we will delete it.</p>
+
+  <h2>How we use it</h2>
+  <ul>
+    <li>To contact you about your free trial and match each child with a suitable teacher.</li>
+    <li>To schedule and run classes, and to keep you updated on your child's progress.</li>
+    <li>To send you parenting tips and Likulearn news, if you joined the mailing list. You can unsubscribe at any time by emailing us.</li>
+    <li>To keep the website and our forms secure.</li>
+  </ul>
+  <p>We use this information because you asked us to arrange classes or, for the mailing list, because you agreed to receive it. We do not sell personal information, and we do not use it for advertising.</p>
+
+  <h2>Who we share it with</h2>
+  <ul>
+    <li><strong>Your child's teacher</strong>, who receives the details they need to teach.</li>
+    <li><strong>Cloudflare</strong>, which hosts this website and the database where registrations are stored.</li>
+    <li><strong>Resend</strong>, which sends our confirmation and notification emails.</li>
+    <li><strong>Workflow tools</strong> our team uses to organise registrations internally.</li>
+  </ul>
+  <p>These providers only process the information on our behalf. Some of them operate outside your country, so your information may be processed abroad under their own security and data protection commitments.</p>
+  <p>This website also loads its fonts from Google Fonts and some photos from Unsplash. When your browser fetches them, those services see your IP address, as with any website you visit.</p>
+
+  <h2>Cookies and storage on your device</h2>
+  <p>We do not use advertising or analytics cookies. While you fill in the registration form, your progress is saved in your own browser so you can pick up where you left off. It stays on your device, and is cleared when you submit the form or choose "Start over".</p>
+
+  <h2>How long we keep it</h2>
+  <p>We keep registration details for as long as we need them to arrange and provide classes, and then delete them. Mailing list addresses are kept until you unsubscribe. You can ask us to delete your information sooner at any time.</p>
+
+  <h2>Your rights</h2>
+  <p>You can ask us to show you the information we hold about you or your child, correct it, delete it or stop using it for a particular purpose, and you can withdraw your consent to marketing at any time. Email <a href={mailto}>{email}</a> and we will respond promptly. If you are not happy with our answer, you can complain to your local data protection authority. In Nigeria, that is the Nigeria Data Protection Commission.</p>
+
+  <h2>Security</h2>
+  <p>Information is sent to us over an encrypted connection and stored with access limited to the Likulearn team. No system is perfectly secure, but we take reasonable steps to protect what you share with us.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If we change how we handle personal information, we will update this page and the date at the top.</p>
+</LegalPage>

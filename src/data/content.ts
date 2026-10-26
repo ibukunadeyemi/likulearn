@@ -73,8 +73,6 @@ export const home = {
   footer_title: "Let's Connect There",
   footer_about: 'Live online classes for children aged 3–18, taught by vetted teachers in Science, Commercial and Arts subjects.',
   contact_email: 'hello@likulearn.com',
-  /** With country code, e.g. "+234 801 234 5678". Leave empty to hide the link. */
-  whatsapp_number: '',
 };
 
 export type Home = typeof home;
@@ -83,7 +81,6 @@ export const testimonials = [
   { name: 'Femi Otitoju', role: null, quote: 'Likulearn makes learning feel personal. The teachers are patient, organised and genuinely care about progress.' },
   { name: 'Gabriel Oduboye', role: null, quote: 'Booking lessons around our schedule is easy, and the communication after each class is clear and helpful.' },
   { name: 'Seyi Akande', role: null, quote: 'A well thought out platform. You can tell it was built with families and students in mind.' },
-  { name: 'Ibukun Adeyemi', role: null, quote: 'Steady, structured teaching that fits real life. I would happily recommend Likulearn to any parent.' },
 ];
 
 export interface Post {
@@ -154,8 +151,8 @@ export interface SubjectGroup { label: string; items: string[] }
 
 export const plans: Plan[] = [
   { id: 'trial', title: 'Free trial only', desc: 'One 45-minute class per child. Decide on a plan afterwards.', price: 'Free' },
-  { id: 'payg', title: 'Pay as you go', desc: 'Book and pay per lesson. No commitment.', price: 'from $15 / lesson' },
-  { id: 'monthly', title: 'Monthly plan', desc: '8 lessons a month per subject, with progress reports.', price: 'from $99 / month' },
+  { id: 'payg', title: 'Pay as you go', desc: 'Book and pay per lesson. No commitment.', price: 'from ₦20,000 / lesson' },
+  { id: 'monthly', title: 'Monthly plan', desc: '8 lessons a month per subject, with progress reports.', price: 'from ₦132,000 / month' },
 ];
 
 export const subjects: SubjectGroup[] = [

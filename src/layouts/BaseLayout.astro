@@ -4,10 +4,13 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { home } from '../data/content';
 
+// 1200x630 JPEG: WebP is not shown by every link preview.
+const DEFAULT_OG_IMAGE = '/og-image.jpg';
+
 interface Props {
   title: string;
   description?: string;
-  /** Absolute or root-relative image for link previews. Defaults to the hero photo. */
+  /** Absolute or root-relative image for link previews. Defaults to a JPEG crop of the hero photo. */
   image?: string | null;
   imageAlt?: string;
   /** 'article' for blog posts. */
@@ -23,8 +26,8 @@ interface Props {
 const {
   title,
   description = 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes and book a free trial class.',
-  image = home.hero_image.src,
-  imageAlt = image === home.hero_image.src ? home.hero_image.alt : undefined,
+  image = DEFAULT_OG_IMAGE,
+  imageAlt = image === DEFAULT_OG_IMAGE ? home.hero_image.alt : undefined,
   type = 'website',
   publishedTime,
   schema = [],
@@ -89,7 +92,7 @@ const jsonLd = schema.length
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter title={home.footer_title} about={home.footer_about} email={home.contact_email} whatsapp={home.whatsapp_number} />
+    <SiteFooter title={home.footer_title} about={home.footer_about} email={home.contact_email} />
 
     <script>
       import { initReveal } from '../scripts/motion';
