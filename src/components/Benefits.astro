@@ -44,8 +44,8 @@ const { title, intro, benefits = [] } = Astro.props;
     transition: transform 400ms var(--ease-out);
   }
   .benefit:hover .benefit-icon { transform: translateY(-3px) rotate(-10deg); }
-  h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
-  p { font-size: 14px; line-height: 1.6; margin: 0; opacity: .8; }
+  .benefit h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  .benefit p { font-size: 14px; line-height: 1.6; margin: 0; opacity: .8; }
   @media (max-width: 720px) {
     .benefits { padding-top: 16px; }
     .benefit-grid { grid-template-columns: 1fr; }
