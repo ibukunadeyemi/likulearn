@@ -68,17 +68,17 @@ const { home } = Astro.props;
 </div>
 
 <script>
+  import { animate, scroll, motionOn } from '../scripts/motion';
+
   // Gentle parallax: the hero photo settles from a slight zoom as the page scrolls.
+  // Motion hands this to the browser's scroll timeline where supported, keeping it off the main thread.
   const photo = document.querySelector<HTMLElement>('.hero-photo img');
-  if (photo && document.documentElement.classList.contains('js-motion')) {
-    let ticking = false;
-    const update = () => {
-      const p = Math.min(window.scrollY / 600, 1);
-      photo.style.transform = `scale(${1.08 - p * 0.08})`;
-      ticking = false;
-    };
-    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    update();
+  const hero = document.getElementById('top');
+  if (photo && hero && motionOn()) {
+    scroll(animate(photo, { transform: ['scale(1.08)', 'scale(1)'] }, { ease: 'linear' }), {
+      target: hero,
+      offset: ['start start', 'end start'],
+    });
   }
 </script>
 

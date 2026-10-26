@@ -20,13 +20,13 @@ export const home = {
   hero_secondary_label: 'How it works',
   proof_text: 'Loved by parents worldwide',
   hero_image: {
-    src: 'https://images.unsplash.com/photo-1623076189461-f7706b741c04?auto=format&fit=crop&w=1600&q=70',
-    alt: 'A child in an online class wearing headphones',
-    width: 1600,
-    height: 1067,
+    src: '/images/hero-online-class.webp',
+    alt: 'A smiling girl takes notes at her desk during a live online maths lesson with her teacher',
+    width: 1536,
+    height: 1024,
   } satisfies Img,
-  hero_image_credit: 'Photo by Thomas Park on Unsplash',
-  hero_image_credit_url: 'https://unsplash.com/@thomascpark',
+  hero_image_credit: '',
+  hero_image_credit_url: '',
 
   steps_title: 'Start *Learning* in 3 Simple Steps',
   steps: [
@@ -80,9 +80,10 @@ export const home = {
 export type Home = typeof home;
 
 export const testimonials = [
-  { name: 'Parent name', role: 'Mother of two', quote: 'Both my kids are in different time zones from their old school, but Likulearn found teachers that fit our week perfectly.' },
-  { name: 'Parent name', role: 'Father, Year 10 student', quote: 'My son’s Chemistry grade went up a full band in one term. The teacher sends notes after every lesson.' },
-  { name: 'Parent name', role: 'Mother, age 6', quote: 'The phonics classes are playful and short enough to hold her attention. She asks when the next one is.' },
+  { name: 'Femi Otitoju', role: null, quote: 'Likulearn makes learning feel personal. The teachers are patient, organised and genuinely care about progress.' },
+  { name: 'Gabriel Oduboye', role: null, quote: 'Booking lessons around our schedule is easy, and the communication after each class is clear and helpful.' },
+  { name: 'Seyi Akande', role: null, quote: 'A well thought out platform. You can tell it was built with families and students in mind.' },
+  { name: 'Ibukun Adeyemi', role: null, quote: 'Steady, structured teaching that fits real life. I would happily recommend Likulearn to any parent.' },
 ];
 
 export interface Post {
