@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.4",
-    "astro": "^7.3.6"
+    "astro": "^7.3.6",
+    "motion": "^12.43.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261006.1",

@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Benefits from '../components/Benefits.astro';
+import ProseBlock from '../components/ProseBlock.astro';
+import SubjectList from '../components/SubjectList.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqsById, home, subjects, testimonials } from '../data/content';
+import { MAX_CHILDREN } from '../data/form-options';
+import { breadcrumbs } from '../lib/seo';
+---
+<BaseLayout
+  title="Why Parents Choose Likulearn for Online Tutoring | Likulearn"
+  description="Live classes with vetted teachers, AI-assisted practice, flexible scheduling and lessons built around each child. See why parents choose Likulearn for ages 3–18."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Why Likulearn', path: '/why-likulearn' }])]}
+>
+  <PageBand eyebrow="Why Likulearn" title="Why Parents Choose Likulearn" lead={home.benefits_intro} />
+  <Benefits benefits={home.benefits} />
+
+  <ProseBlock tone="cream" eyebrow="Live teaching" title="Real Teachers, *Live*, Every Lesson">
+    <p>Many online learning options are really video libraries: your child watches, then works alone. Likulearn is different. Every class is taught live by a qualified teacher who can see your child’s work, hear their questions and respond in the moment.</p>
+    <p>That live connection is what keeps children engaged. A teacher notices when a child is confused before they give up, celebrates when something clicks, and adjusts the lesson as it happens. It is the closest thing to a great private tutor sitting next to your child, without the travel.</p>
+  </ProseBlock>
+
+  <ProseBlock eyebrow="AI-assisted learning" title="Smart Tools, *Teacher-Led*">
+    <p>Our teachers use AI tools to make each child’s learning more personal. They help teachers prepare extra practice at exactly the right level, create fresh examples when a child needs to see an idea another way, and spend less time on paperwork and more time teaching.</p>
+    <ul class="ticks">
+      <li><strong>Practice that fits.</strong> Questions pitched at your child’s level, so they are stretched without being overwhelmed.</li>
+      <li><strong>More ways to explain.</strong> New examples and explanations, ready when the first one doesn’t land.</li>
+      <li><strong>More teaching time.</strong> Less time spent preparing materials means more attention on your child during lessons.</li>
+    </ul>
+    <p>AI never replaces the teacher. Every lesson is led by a real person who knows your child, and every piece of material is checked by the teacher before your child sees it.</p>
+  </ProseBlock>
+
+  <ProseBlock tone="cream" eyebrow="Subjects" title="From First Phonics to *Final Exams*">
+    <p>Likulearn teaches children from age 3 to 18, so a family can stay with us as children grow. Younger learners build the foundations of reading, writing and number. Older students choose from Science, Commercial and Arts subjects, right up to exam level.</p>
+    <SubjectList subjects={subjects} />
+    <p>Not sure which track suits your child? Read our parent’s guide to <a href="/blog/choosing-science-commercial-arts">choosing between Science, Commercial and Arts</a>, or book trial classes in a few different subjects to see what clicks.</p>
+  </ProseBlock>
+
+  <ProseBlock eyebrow="Flexible" title="Built Around *Your Family*">
+    <p>Every family’s week looks different, so you choose how learning fits into yours.</p>
+    <ul class="ticks">
+      <li><strong>1-on-1 or small group.</strong> Choose individual lessons paced entirely around your child, or small groups with children at a similar level.</li>
+      <li><strong>Your days and times.</strong> Pick the days that work and morning, afternoon or evening slots.</li>
+      <li><strong>Any time zone.</strong> Families join from West Africa, the UK and Europe, the Gulf, India, North America and beyond. We match teachers who can teach when you need them.</li>
+      <li><strong>The whole family at once.</strong> Register up to {MAX_CHILDREN} children on one form, each with their own subjects, schedule and teacher.</li>
+      <li><strong>Teacher preference.</strong> Tell us if you would prefer a female or male teacher for your child.</li>
+    </ul>
+  </ProseBlock>
+
+  <ProseBlock tone="cream" eyebrow="Safety" title="Safe, Supervised *Classrooms*">
+    <p>Every teacher is vetted for subject expertise and experience teaching children online before they join Likulearn. Classes run in supervised virtual classrooms with clear safeguarding standards for every session.</p>
+    <p>For younger children, we recommend an adult stays nearby during lessons. We collect only the information we need to arrange classes, never sell it, and explain exactly how we handle it in our <a href="/privacy">privacy policy</a>.</p>
+  </ProseBlock>
+
+  <ProseBlock eyebrow="Parents" title="You Always Know *How They’re Doing*">
+    <p>You are part of your child’s learning, not a bystander. Parents get regular progress updates and a direct line to their child’s teacher, so questions get answered quickly and small worries never become big ones.</p>
+    <p>Monthly plans include written progress reports that show what your child has covered, where they have improved and what comes next. It makes it easy to see the value of every lesson, and to celebrate progress together.</p>
+  </ProseBlock>
+
+  <Testimonials title={home.testimonials_title} intro={home.testimonials_intro} testimonials={testimonials} />
+  <Faq
+    title="Questions Parents *Ask Us*"
+    intro="About our teachers, classes and how you stay involved."
+    email={home.contact_email}
+    faqs={faqsById('ages-subjects', 'teachers-safety', 'class-size', 'progress', 'outside-nigeria')}
+  />
+  <CtaBand title="See the Difference in One Free Class" text="Book a free 45-minute trial and meet your child’s teacher. No card needed." label="Book a free trial" href="/enrol" />
+</BaseLayout>

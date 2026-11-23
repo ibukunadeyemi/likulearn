@@ -1,0 +1,36 @@
+---
+/** The plans from content.ts as cards, each leading to the registration form. */
+import Rich from './Rich.astro';
+import type { Plan } from '../data/content';
+
+interface Props { title: string; intro?: string | null; plans: Plan[] }
+const { title, intro, plans } = Astro.props;
+---
+<section class="section">
+  <h2 class="section-title tight" data-reveal><Rich text={title} /></h2>
+  {intro && <p class="section-lead" data-reveal>{intro}</p>}
+  <div class="plans">
+    {plans.map((p, i) => (
+      <article class:list={['plan', { featured: i === 0 }]} data-reveal>
+        <h3>{p.title}</h3>
+        <p class="price">{p.price}</p>
+        <p class="desc">{p.desc}</p>
+        <a href="/enrol" class:list={['btn', i === 0 ? 'btn-orange' : 'btn-green']}>{i === 0 ? 'Book a free trial' : 'Start with a free trial'}</a>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .plan {
+    display: flex; flex-direction: column; gap: 10px; padding: 28px 24px; border-radius: 16px; background: #fff;
+    border: 1.5px solid var(--line-warm); transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
+  }
+  .plan:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -26px rgba(14,59,54,.55); }
+  .plan.featured { border-color: var(--green); }
+  h3 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ink); }
+  .price { margin: 0; font-size: 22px; font-weight: 500; color: var(--green); }
+  .desc { margin: 0 0 8px; flex: 1; font-size: 14.5px; line-height: 1.6; color: var(--muted); }
+  .btn { align-self: flex-start; }
+</style>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import EnrolForm from '../components/EnrolForm.astro';
+import InfoGrid from '../components/InfoGrid.astro';
+import ProseBlock from '../components/ProseBlock.astro';
+import PlanCards from '../components/PlanCards.astro';
+import Faq from '../components/Faq.astro';
+import { faqsById, home, plans, subjects } from '../data/content';
+import { MAX_CHILDREN } from '../data/form-options';
+import { breadcrumbs } from '../lib/seo';
+
+const next = [
+  { title: 'You get a confirmation email', text: 'As soon as you submit, we email you a summary of your registration so you have everything in one place.' },
+  { title: 'We match a teacher within 48 hours', text: 'Our team reviews each child’s details and assigns a vetted teacher for every subject they need.' },
+  { title: 'We send the trial time', text: 'You receive the date and time of each child’s free 45-minute trial class, arranged around the schedule you gave us.' },
+  { title: 'Your child joins the live class', text: 'They meet their teacher and have a real lesson. Afterwards, choose a plan that fits, or stop there. No obligation.' },
+];
+---
+<BaseLayout
+  title="Enrol Your Child: Book a Free Trial Class | Likulearn"
+  description="Register your children for live online classes in minutes. One form for the whole family, no card needed, and a teacher assigned within 48 hours."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Enrol', path: '/enrol' }])]}
+>
+  <PageBand eyebrow="Enrol" title="Enrol Your Child at Likulearn" lead={home.enrol_intro} />
+  <EnrolForm title={home.enrol_title} plans={plans} subjects={subjects} />
+
+  <InfoGrid numbered title="What Happens *After You Register*" intro="No waiting around wondering. Here is what to expect once you press submit." items={next} />
+
+  <ProseBlock tone="cream" eyebrow="Before you start" title="What You’ll Need to *Register*">
+    <p>The form takes about two minutes per family. It helps to have these details ready:</p>
+    <ul class="ticks">
+      <li><strong>Your contact details:</strong> name, email address, phone or WhatsApp number and time zone.</li>
+      <li><strong>Each child’s name, age and school year.</strong> You can add up to {MAX_CHILDREN} children on one form.</li>
+      <li><strong>The subjects each child needs,</strong> from early phonics to exam-level Science, Commercial and Arts subjects.</li>
+      <li><strong>1-on-1 or small group,</strong> and the days and times of day that suit your family.</li>
+      <li><strong>Anything else we should know,</strong> such as your child’s goals, an upcoming exam, or a preference for a female or male teacher.</li>
+    </ul>
+    <p>Your progress is saved in your browser as you go, so you can leave and come back without losing anything. We only use these details to arrange your child’s classes. See our <a href="/privacy">privacy policy</a> for exactly how we handle them.</p>
+    <h3>Not sure which subjects to choose?</h3>
+    <p>Pick the subjects your child finds hardest or cares about most right now. You can always add more later. If you are deciding between tracks, our guide to <a href="/blog/choosing-science-commercial-arts">choosing Science, Commercial or Arts</a> can help. Want to know more first? See <a href="/how-it-works">how Likulearn works</a> and <a href="/why-likulearn">why parents choose us</a>.</p>
+  </ProseBlock>
+
+  <PlanCards title="Plans and *Prices*" intro="Every new learner starts with a free trial class. The plan you pick on the form is just a starting point, and you can change it after the trial." plans={plans} />
+  <Faq
+    title="Before You *Register*"
+    intro="Quick answers to the questions parents ask most."
+    email={home.contact_email}
+    faqs={faqsById('free-trial', 'cost', 'siblings', 'outside-nigeria', 'equipment', 'cancel')}
+  />
+</BaseLayout>

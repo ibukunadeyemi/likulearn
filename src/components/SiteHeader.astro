@@ -1,5 +1,9 @@
 ---
 import { NAV_LINKS } from '../data/site';
+
+// Each menu item is its own page; blog posts count as the Blog page.
+const here = Astro.url.pathname.replace(/\.html$/, '').replace(/(.)\/$/, '$1');
+const isCurrent = (href: string) => here === href || here.startsWith(href + '/');
 ---
 <header id="site-nav">
   <div class="nav-shell">
@@ -7,11 +11,10 @@ import { NAV_LINKS } from '../data/site';
       <img src="/logo-dark.svg" alt="" width="140" height="39" />
     </a>
     <nav class="nav-links" aria-label="Main">
-      {NAV_LINKS.map((l) => <a href={l.href} data-spy={l.href.split('#')[1]}>{l.label}</a>)}
+      {NAV_LINKS.map((l) => <a href={l.href} class:list={{ active: isCurrent(l.href) }} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="nav-actions">
-      <a href="/#enrol" class="nav-login">Log in</a>
-      <a href="/#enrol" class="btn btn-orange btn-sm">Enrol your child</a>
+      <a href="/enrol" class="btn btn-orange btn-sm">Enrol your child</a>
       <button type="button" id="menu-toggle" class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
@@ -19,15 +22,16 @@ import { NAV_LINKS } from '../data/site';
   </div>
   <!-- Small-screen menu: everything the desktop nav shows, in a dropdown panel. -->
   <nav id="mobile-menu" class="mobile-menu" aria-label="Menu" hidden>
-    {NAV_LINKS.map((l) => <a href={l.href}>{l.label}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>)}
+    {NAV_LINKS.map((l) => <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>)}
     <div class="mobile-menu-actions">
-      <a href="/#enrol" class="btn mm-ghost">Log in</a>
-      <a href="/#enrol" class="btn btn-orange">Enrol your child</a>
+      <a href="/enrol" class="btn btn-orange">Enrol your child</a>
     </div>
   </nav>
 </header>
 
 <script>
+  import { animate, stagger, motionOn, snap, easeOut } from '../scripts/motion';
+
   const nav = document.getElementById('site-nav')!;
   const menuBtn = document.getElementById('menu-toggle')!;
   const menu = document.getElementById('mobile-menu')!;
@@ -37,29 +41,33 @@ import { NAV_LINKS } from '../data/site';
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // Small-screen menu.
+  // Small-screen menu. Springs open with its links staggered in, and fades out before hiding.
+  let isOpen = false;
+  let closing: ReturnType<typeof animate> | null = null;
+  const items = menu.querySelectorAll<HTMLElement>(':scope > a, .mobile-menu-actions');
   const setMenu = (open: boolean) => {
-    menu.hidden = !open;
+    if (open === isOpen) return;
+    isOpen = open;
     menuBtn.setAttribute('aria-expanded', String(open));
     menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     nav.classList.toggle('menu-open', open);
+    closing?.stop();
+    closing = null;
+    if (!motionOn()) { menu.hidden = !open; return; }
+    if (open) {
+      menu.hidden = false;
+      animate(menu, { opacity: [0, 1], transform: ['translateY(-10px) scale(0.97)', 'translateY(0px) scale(1)'] }, { ...snap, opacity: { duration: 0.2 } });
+      animate(items, { opacity: [0, 1], transform: ['translateY(10px)', 'translateY(0px)'] }, { ...snap, delay: stagger(0.035, { startDelay: 0.04 }) });
+    } else {
+      closing = animate(menu, { opacity: 0, transform: 'translateY(-6px) scale(0.98)' }, { duration: 0.18, ease: easeOut });
+      closing.then(() => { if (!isOpen) menu.hidden = true; });
+    }
   };
-  menuBtn.addEventListener('click', () => setMenu(menu.hidden));
+  menuBtn.addEventListener('click', () => setMenu(!isOpen));
   menu.addEventListener('click', (e) => { if ((e.target as Element).closest('a')) setMenu(false); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
-  document.addEventListener('click', (e) => { if (!menu.hidden && !nav.contains(e.target as Node)) setMenu(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) { setMenu(false); menuBtn.focus(); } });
+  document.addEventListener('click', (e) => { if (isOpen && !nav.contains(e.target as Node)) setMenu(false); });
   window.matchMedia('(min-width: 821px)').addEventListener('change', (m) => { if (m.matches) setMenu(false); });
-
-  // Highlight the nav link for the section currently in view.
-  const links = [...nav.querySelectorAll<HTMLAnchorElement>('[data-spy]')].filter((a) => a.dataset.spy);
-  const sections = links.map((a) => document.getElementById(a.dataset.spy!)).filter((s): s is HTMLElement => !!s);
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      links.forEach((a) => a.classList.toggle('active', a.dataset.spy === e.target.id));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach((s) => spy.observe(s));
 </script>
 
 <style>
@@ -134,8 +142,6 @@ import { NAV_LINKS } from '../data/site';
   .nav-links a.active::after { transform: scaleX(1); }
 
   .nav-actions { display: flex; align-items: center; gap: 10px; }
-  .nav-login { color: #fff; font-size: 14px; padding: 9px 12px; border-radius: 8px; transition: background 200ms ease; }
-  .nav-login:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
 
   /* ---------- hamburger ---------- */
   .menu-btn {
@@ -173,32 +179,23 @@ import { NAV_LINKS } from '../data/site';
     border: 1px solid var(--line);
     box-shadow: 0 24px 60px rgba(14, 59, 54, 0.25);
     transform-origin: top center;
-    animation: menu-in 260ms var(--ease-out);
     max-height: calc(100dvh - 100px);
     overflow-y: auto;
   }
   .mobile-menu[hidden] { display: none; }
-  @keyframes menu-in { from { opacity: 0; transform: translateY(-8px) scale(0.98); } }
   .mobile-menu > a {
     display: flex; align-items: center; justify-content: space-between;
     min-height: 48px; padding: 0 14px; border-radius: 10px;
     font-size: 16px; font-weight: 500; color: var(--ink);
-    animation: rise-in 360ms var(--ease-out) both;
   }
-  .mobile-menu > a:nth-child(2) { animation-delay: 30ms; }
-  .mobile-menu > a:nth-child(3) { animation-delay: 60ms; }
-  .mobile-menu > a:nth-child(4) { animation-delay: 90ms; }
-  .mobile-menu > a:nth-child(5) { animation-delay: 120ms; }
   .mobile-menu > a svg { color: var(--orange); transition: transform 250ms var(--ease-out); }
   .mobile-menu > a:hover { background: var(--cream); color: var(--ink); }
   .mobile-menu > a:hover svg { transform: translateX(3px); }
   .mobile-menu-actions {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    display: grid; gap: 8px;
     margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line);
   }
   .mobile-menu-actions .btn { padding: 12px 16px; font-size: 14px; }
-  .mm-ghost { border: 1px solid var(--line); color: var(--ink); background: #fff; }
-  .mm-ghost:hover { color: var(--ink); border-color: var(--green); }
 
   @media (max-width: 1000px) {
     .nav-shell { gap: 12px; }
@@ -210,7 +207,6 @@ import { NAV_LINKS } from '../data/site';
     .nav-links { display: none; }
     .nav-shell { justify-content: space-between; }
     .menu-btn { display: inline-flex; }
-    .nav-login { display: none; }
     header#site-nav.scrolled .nav-shell { height: 58px; }
   }
   @media (max-width: 560px) {

@@ -4,10 +4,13 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import { home } from '../data/content';
 
+// 1200x630 JPEG: WebP is not shown by every link preview.
+const DEFAULT_OG_IMAGE = '/og-image.jpg';
+
 interface Props {
   title: string;
   description?: string;
-  /** Absolute or root-relative image for link previews. Defaults to the hero photo. */
+  /** Absolute or root-relative image for link previews. Defaults to a JPEG crop of the hero photo. */
   image?: string | null;
   imageAlt?: string;
   /** 'article' for blog posts. */
@@ -23,8 +26,8 @@ interface Props {
 const {
   title,
   description = 'Live online classes for ages 3–18 across Science, Commercial and Arts subjects. Register your children in minutes and book a free trial class.',
-  image = home.hero_image.src,
-  imageAlt = image === home.hero_image.src ? home.hero_image.alt : undefined,
+  image = DEFAULT_OG_IMAGE,
+  imageAlt = image === DEFAULT_OG_IMAGE ? home.hero_image.alt : undefined,
   type = 'website',
   publishedTime,
   schema = [],
@@ -89,10 +92,10 @@ const jsonLd = schema.length
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <SiteFooter title={home.footer_title} about={home.footer_about} email={home.contact_email} whatsapp={home.whatsapp_number} />
+    <SiteFooter title={home.footer_title} about={home.footer_about} email={home.contact_email} />
 
     <script>
-      const root = document.documentElement;
+      import { initReveal } from '../scripts/motion';
 
       // Fade images in once loaded.
       document.querySelectorAll<HTMLImageElement>('img.fade-img').forEach((img) => {
@@ -100,37 +103,8 @@ const jsonLd = schema.length
         else img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
       });
 
-      // Scroll reveal: fade/rise blocks as they enter the viewport, staggered among siblings.
-      if (root.classList.contains('js-motion')) {
-        const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
-        // Once the entrance finishes, drop the reveal styles so the element's own hover transitions apply.
-        const reveal = (el: HTMLElement) => {
-          el.classList.add('is-visible');
-          const done = (ev: TransitionEvent) => {
-            if (ev.target !== el || ev.propertyName !== 'transform') return;
-            el.removeEventListener('transitionend', done);
-            el.removeAttribute('data-reveal');
-            el.classList.remove('is-visible');
-            el.style.removeProperty('--reveal-i');
-          };
-          el.addEventListener('transitionend', done);
-        };
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (!e.isIntersecting) return;
-            reveal(e.target as HTMLElement);
-            io.unobserve(e.target);
-          });
-        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-
-        const seen = new Map<Element | null, number>();
-        els.forEach((el) => {
-          const i = seen.get(el.parentElement) ?? 0;
-          seen.set(el.parentElement, i + 1);
-          el.style.setProperty('--reveal-i', String(Math.min(i, 7)));
-          io.observe(el);
-        });
-      }
+      // Scroll reveal: spring blocks into place as they enter the viewport.
+      initReveal();
     </script>
   </body>
 </html>

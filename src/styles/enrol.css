@@ -72,10 +72,6 @@
 
 /* ---------- body ---------- */
 .form-body { padding: 28px var(--pad-x) 0; }
-.step-panel.enter-next { animation: slide-from-right 450ms var(--ease-out) both; }
-.step-panel.enter-back { animation: slide-from-left 450ms var(--ease-out) both; }
-@keyframes slide-from-right { from { opacity: 0; transform: translateX(28px); } }
-@keyframes slide-from-left { from { opacity: 0; transform: translateX(-28px); } }
 
 .step-head { margin-bottom: 24px; }
 .step-count { margin: 0 0 4px; font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--orange-hover); }
@@ -278,6 +274,7 @@ html.js-motion .kid-leave { animation: kid-out 320ms var(--ease-out) forwards; p
 }
 .edit-btn:hover { border-color: var(--green); background: #F6FAF9; }
 .consent { margin: 4px 0 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+.consent a { color: inherit; text-decoration: underline; }
 
 /* ---------- action bar ---------- */
 /* Sticks to the bottom of the screen while the (long) step scrolls past. */
@@ -307,16 +304,11 @@ html.js-motion .kid-leave { animation: kid-out 320ms var(--ease-out) forwards; p
 }
 
 /* ---------- done ---------- */
+/* Entrance is animated by Motion in enrol.ts. */
 .enrol-done { padding: 56px var(--pad-x) 48px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.enrol-done > * { animation: rise-in 600ms var(--ease-out) both; }
-.enrol-done > :nth-child(2) { animation-delay: 200ms; }
-.enrol-done > :nth-child(3) { animation-delay: 280ms; }
-.enrol-done > :nth-child(4) { animation-delay: 360ms; }
-.enrol-done > :nth-child(5) { animation-delay: 440ms; }
 .done-check {
   width: 64px; height: 64px; border-radius: 50%; background: var(--green);
   display: flex; align-items: center; justify-content: center;
-  animation: pop 600ms var(--ease-out) both !important;
 }
 .done-check path { stroke-dasharray: 30; animation: draw-check 500ms 350ms var(--ease-out) both; }
 @keyframes draw-check { from { stroke-dashoffset: 30; } to { stroke-dashoffset: 0; } }

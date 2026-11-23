@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Teach from '../components/Teach.astro';
+import InfoGrid from '../components/InfoGrid.astro';
+import ProseBlock from '../components/ProseBlock.astro';
+import SubjectList from '../components/SubjectList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { home, subjects } from '../data/content';
+import { breadcrumbs } from '../lib/seo';
+
+const perks = [
+  { title: 'Global reach', text: 'Teach children from families in many countries and time zones, all from your own home.' },
+  { title: 'Flexible schedule', text: 'Tell us when you are available. We match you with learners whose preferred times fit your week.' },
+  { title: 'Ready-made enrolments', text: 'No marketing or chasing clients. We find the families, handle registration and match learners to your subjects.' },
+  { title: 'Scheduling handled', text: 'We arrange trial classes and regular lessons with parents, so you can spend your time on teaching.' },
+  { title: 'Smart teaching tools', text: 'Use AI tools to prepare practice and examples at the right level for each learner, and spend less time on prep.' },
+  { title: 'Fair, on-time pay', text: 'Clear rates agreed up front, and payment you can rely on.' },
+];
+
+const apply = [
+  { title: 'Email us', text: 'Send your subjects, the ages you teach, your qualifications and a short summary of your experience. A CV helps.' },
+  { title: 'We review your application', text: 'Our team reads every application and looks at how your subjects and experience match the families waiting for teachers.' },
+  { title: 'We get in touch', text: 'If your experience fits, we contact you to talk about next steps and your availability.' },
+  { title: 'Start teaching', text: 'Once you are set up, we start matching you with learners for your subjects and times.' },
+];
+---
+<BaseLayout
+  title="Teach Online with Likulearn: Tutor Jobs | Likulearn"
+  description="Qualified in a Science, Commercial or Arts subject? Teach live online classes with Likulearn. Flexible hours, ready-made enrolments and fair, on-time pay."
+  schema={[breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Teach', path: '/teach' }])]}
+>
+  <PageBand eyebrow="Teach with us" title="Teach Online with Likulearn" lead="We handle enrolment, matching and scheduling, so you can focus on teaching." />
+  <Teach home={home} />
+
+  <InfoGrid tone="cream" title="Why Teach *With Us*" intro="Likulearn takes care of everything around the lesson, so your time goes into what you do best." items={perks} />
+
+  <ProseBlock eyebrow="Who we’re looking for" title="Teachers Who Love *Teaching Children*">
+    <p>We are looking for qualified, experienced teachers who can make a subject click for children and teenagers, and who enjoy doing it. You might be a classroom teacher looking for extra hours, an experienced private tutor, or a subject specialist with a real gift for explaining.</p>
+    <h3>Subjects we teach</h3>
+    <SubjectList subjects={subjects} />
+    <h3>What we look for</h3>
+    <ul class="ticks">
+      <li>A relevant qualification and strong knowledge of your subject.</li>
+      <li>Experience teaching children, ideally including online lessons.</li>
+      <li>Patience, warmth and clear communication with children and parents.</li>
+      <li>Reliability: you turn up on time, prepared, for every class.</li>
+      <li>A laptop with a camera and microphone, a stable internet connection and a quiet place to teach.</li>
+    </ul>
+  </ProseBlock>
+
+  <ProseBlock tone="cream" eyebrow="The job" title="What Teaching With Likulearn *Is Like*">
+    <p>You teach live, over video, from wherever you work best. Each learner comes to you already registered, with their age, school year, subjects, goals and preferred times shared up front, so you can plan a first lesson that fits before you even meet them.</p>
+    <p>Most learners start with a free 45-minute trial class. It is your chance to get to know the child, find out where they are, and show the family what learning with you looks like. Many families then continue with regular weekly lessons, so you build real, lasting relationships with your learners and see their progress over months and years.</p>
+    <p>You can teach 1-on-1, small groups, or both. Younger learners need short, lively activities and plenty of encouragement; older students need depth, exam practice and someone who can explain the reasoning behind every answer. We match you with the ages and levels that suit your experience.</p>
+    <p>Our team stays in touch with parents about scheduling and admin, and you keep families updated on how their child is getting on. Everything outside the lesson is designed to take as little of your time as possible.</p>
+  </ProseBlock>
+
+  <InfoGrid numbered title="How to *Apply*" intro="A simple process, with a real person reading every application." items={apply} />
+
+  <CtaBand title="Ready to Teach With Likulearn?" text={'Email ' + home.contact_email + ' with your subjects and experience.'} label="Apply to teach" href={home.teach_cta_url} />
+</BaseLayout>

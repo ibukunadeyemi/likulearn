@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBand from '../components/PageBand.astro';
+import Faq from '../components/Faq.astro';
+import { faq_intro, faqs, home } from '../data/content';
+import { breadcrumbs, faqPage } from '../lib/seo';
+---
+<BaseLayout
+  title="FAQ: Online Classes, Free Trial and Prices | Likulearn"
+  description="Answers to common questions about Likulearn: ages and subjects, the free trial, prices, 1-on-1 and group classes, teachers, safety and what your child needs."
+  schema={[faqPage(faqs), breadcrumbs([{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq' }])]}
+>
+  <PageBand eyebrow="FAQ" title="Frequently Asked Questions" lead={faq_intro} />
+  <Faq intro="Still have a question? Our team is happy to help." email={home.contact_email} faqs={faqs} />
+</BaseLayout>

@@ -1,6 +1,6 @@
 /**
  * Fixed choices in the registration form, shared by the browser script and the API
- * that validates submissions. Plans and subjects are edited in the CMS instead.
+ * that validates submissions. Plans and subjects are edited in content.ts instead.
  */
 export const CLASS_TYPES = ['1-on-1', 'Small group'];
 export const TIMES = ['Morning', 'Afternoon', 'Evening'];

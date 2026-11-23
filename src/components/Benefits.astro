@@ -10,7 +10,7 @@ interface Props {
 const { title, intro, benefits = [] } = Astro.props;
 ---
 <section id="benefits" class="section benefits">
-  <h2 class="section-title tight" data-reveal><Rich text={title} /></h2>
+  {title && <h2 class="section-title tight" data-reveal><Rich text={title} /></h2>}
   {intro && <p class="section-lead" data-reveal>{intro}</p>}
   <div class="benefit-grid">
     {benefits.map((b, i) => (
@@ -27,6 +27,8 @@ const { title, intro, benefits = [] } = Astro.props;
 
 <style>
   .benefits { padding-top: 24px; }
+  /* On its own page it follows the page band rather than the steps. */
+  :global(.band) + .benefits { padding-top: 80px; }
   .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 36px 20px; }
   .benefit {
     position: relative; border: 1.5px solid var(--ink); border-radius: 6px;
@@ -42,8 +44,8 @@ const { title, intro, benefits = [] } = Astro.props;
     transition: transform 400ms var(--ease-out);
   }
   .benefit:hover .benefit-icon { transform: translateY(-3px) rotate(-10deg); }
-  h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
-  p { font-size: 14px; line-height: 1.6; margin: 0; opacity: .8; }
+  .benefit h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  .benefit p { font-size: 14px; line-height: 1.6; margin: 0; opacity: .8; }
   @media (max-width: 720px) {
     .benefits { padding-top: 16px; }
     .benefit-grid { grid-template-columns: 1fr; }

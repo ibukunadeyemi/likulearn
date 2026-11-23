@@ -1,22 +1,19 @@
 ---
 import { NAV_LINKS } from '../data/site';
-import { whatsappHref } from '../lib/ui';
 
 interface Props {
   title?: string | null;
   about?: string | null;
   email?: string | null;
-  whatsapp?: string | null;
 }
-const { title, about, email, whatsapp } = Astro.props;
-const wa = whatsappHref(whatsapp);
+const { title, about, email } = Astro.props;
 ---
 <footer class="footer">
   <div class="glow" aria-hidden="true"></div>
   <div class="inner">
     <div class="cta" data-reveal>
       <h2>{title || "Let's Connect There"}</h2>
-      <a href="/#enrol" class="btn btn-orange">Enrol your child<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
+      <a href="/enrol" class="btn btn-orange">Enrol your child<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>
     </div>
     <div class="cols">
       <div data-reveal>
@@ -30,7 +27,6 @@ const wa = whatsappHref(whatsapp);
       <div class="col" data-reveal>
         <div class="head">Contact</div>
         {email && <a href={`mailto:${email}`}>{email}</a>}
-        {wa ? <a href={wa} target="_blank" rel="noopener">WhatsApp support</a> : <span>WhatsApp support</span>}
       </div>
       <div class="col" data-reveal>
         <div class="head">Get the latest tips</div>
@@ -46,7 +42,7 @@ const wa = whatsappHref(whatsapp);
     </div>
     <div class="bottom">
       <span>© {new Date().getFullYear()} Likulearn · likulearn.com. All rights reserved.</span>
-      <span>Terms &amp; Conditions · Privacy Policy</span>
+      <span class="legal-links"><a href="/terms">Terms &amp; Conditions</a> · <a href="/privacy">Privacy Policy</a></span>
     </div>
   </div>
 </footer>
@@ -54,7 +50,7 @@ const wa = whatsappHref(whatsapp);
 <script>
   import { EMAIL_RE, postJSON } from '../scripts/enrol';
 
-  // Signups are saved to the "Subscribers" collection in the CMS (src/pages/api/subscribe.ts).
+  // Signups are saved to the subscribers table in D1 (src/pages/api/subscribe.ts).
   const NEWSLETTER_ENDPOINT = '/api/subscribe';
   const form = document.getElementById('news-form') as HTMLFormElement;
   const done = document.getElementById('news-done')!;
@@ -125,6 +121,8 @@ const wa = whatsappHref(whatsapp);
     padding-top: 24px; border-top: 1px solid rgba(255,255,255,.15);
     font-size: 13px; color: rgba(255,255,255,.55);
   }
+  .legal-links a { color: rgba(255,255,255,.75); }
+  .legal-links a:hover { color: #fff; }
   @media (max-width: 720px) {
     .inner { padding: 56px 16px 28px; }
   }

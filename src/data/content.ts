@@ -3,6 +3,7 @@
  *
  * Section headings: wrap a word in *asterisks* to colour it; "\n" starts a new line.
  */
+import { MAX_CHILDREN } from './form-options';
 
 export interface Img {
   src: string;
@@ -20,13 +21,13 @@ export const home = {
   hero_secondary_label: 'How it works',
   proof_text: 'Loved by parents worldwide',
   hero_image: {
-    src: 'https://images.unsplash.com/photo-1623076189461-f7706b741c04?auto=format&fit=crop&w=1600&q=70',
-    alt: 'A child in an online class wearing headphones',
-    width: 1600,
-    height: 1067,
+    src: '/images/hero-online-class.webp',
+    alt: 'A smiling girl takes notes at her desk during a live online maths lesson with her teacher',
+    width: 1536,
+    height: 1024,
   } satisfies Img,
-  hero_image_credit: 'Photo by Thomas Park on Unsplash',
-  hero_image_credit_url: 'https://unsplash.com/@thomascpark',
+  hero_image_credit: '',
+  hero_image_credit_url: '',
 
   steps_title: 'Start *Learning* in 3 Simple Steps',
   steps: [
@@ -45,6 +46,9 @@ export const home = {
     { title: 'Science, Commercial & Arts', text: 'From early phonics to exam-level Physics, Accounting and Literature.', icon: 'flask', color: 'green' },
     { title: 'Individual Attention', text: '1-on-1 or small groups, paced to each child and adjusted as they grow.', icon: 'person', color: 'lime' },
     { title: 'Parent Involvement', text: 'Regular progress updates and a direct line to your child’s teacher.', icon: 'family', color: 'red' },
+    { title: 'AI-Assisted Learning', text: 'Teachers use AI tools to tailor practice to each child’s level, while a real teacher leads every lesson.', icon: 'sparkles', color: 'blue' },
+    { title: 'Flexible Scheduling', text: 'Choose the days and times that suit your family, morning, afternoon or evening.', icon: 'clock', color: 'amber' },
+    { title: 'Learn From Anywhere', text: 'Families join from many time zones. All your child needs is a device and a quiet space.', icon: 'globe', color: 'green' },
   ],
 
   enrol_title: 'Register Your Child for a *Free Trial*',
@@ -73,16 +77,14 @@ export const home = {
   footer_title: "Let's Connect There",
   footer_about: 'Live online classes for children aged 3–18, taught by vetted teachers in Science, Commercial and Arts subjects.',
   contact_email: 'hello@likulearn.com',
-  /** With country code, e.g. "+234 801 234 5678". Leave empty to hide the link. */
-  whatsapp_number: '',
 };
 
 export type Home = typeof home;
 
 export const testimonials = [
-  { name: 'Parent name', role: 'Mother of two', quote: 'Both my kids are in different time zones from their old school, but Likulearn found teachers that fit our week perfectly.' },
-  { name: 'Parent name', role: 'Father, Year 10 student', quote: 'My son’s Chemistry grade went up a full band in one term. The teacher sends notes after every lesson.' },
-  { name: 'Parent name', role: 'Mother, age 6', quote: 'The phonics classes are playful and short enough to hold her attention. She asks when the next one is.' },
+  { name: 'Femi Otitoju', role: null, quote: 'Likulearn makes learning feel personal. The teachers are patient, organised and genuinely care about progress.' },
+  { name: 'Gabriel Oduboye', role: null, quote: 'Booking lessons around our schedule is easy, and the communication after each class is clear and helpful.' },
+  { name: 'Seyi Akande', role: null, quote: 'A well thought out platform. You can tell it was built with families and students in mind.' },
 ];
 
 export interface Post {
@@ -153,8 +155,8 @@ export interface SubjectGroup { label: string; items: string[] }
 
 export const plans: Plan[] = [
   { id: 'trial', title: 'Free trial only', desc: 'One 45-minute class per child. Decide on a plan afterwards.', price: 'Free' },
-  { id: 'payg', title: 'Pay as you go', desc: 'Book and pay per lesson. No commitment.', price: 'from $15 / lesson' },
-  { id: 'monthly', title: 'Monthly plan', desc: '8 lessons a month per subject, with progress reports.', price: 'from $99 / month' },
+  { id: 'payg', title: 'Pay as you go', desc: 'Book and pay per lesson. No commitment.', price: 'from ₦20,000 / lesson' },
+  { id: 'monthly', title: 'Monthly plan', desc: '8 lessons a month per subject, with progress reports.', price: 'from ₦132,000 / month' },
 ];
 
 export const subjects: SubjectGroup[] = [
@@ -163,3 +165,85 @@ export const subjects: SubjectGroup[] = [
   { label: 'Commercial', items: ['Accounting', 'Commerce', 'Economics', 'Business Studies'] },
   { label: 'Arts', items: ['English Language', 'Literature', 'History', 'Government', 'Fine Art', 'French'] },
 ];
+
+/* ---------- FAQ ---------- */
+
+export interface Faq {
+  /** Lets a page show just the questions that fit it, with faqsById. */
+  id: string;
+  q: string;
+  a: string;
+  /** Optional link shown after the answer. */
+  link?: { label: string; href: string };
+}
+
+const paidPlans = plans.filter((p) => p.id !== 'trial').map((p) => p.title + ' is ' + p.price + '. ' + p.desc).join(' ');
+
+export const faq_title = 'Frequently Asked *Questions*';
+export const faq_intro = 'Everything parents usually ask before booking a free trial. Can’t find your answer? Email us any time.';
+
+export const faqs: Faq[] = [
+  {
+    id: 'ages-subjects',
+    q: 'What ages and subjects do you teach?',
+    a: 'We teach children aged 3 to 18. Younger learners start with phonics, reading, early numeracy and handwriting. Older students can take Science subjects (including Mathematics, Physics, Chemistry and Biology), Commercial subjects (such as Accounting and Economics) and Arts subjects (such as English, Literature and French), right up to exam level.',
+  },
+  {
+    id: 'free-trial',
+    q: 'How does the free trial work?',
+    a: 'Every new learner gets one free 45-minute class, and no card is needed. Register your children with the form, and within 48 hours our team will match each child with a teacher and email you to arrange a time. There is no obligation to continue afterwards.',
+    link: { label: 'Book a free trial', href: '/enrol' },
+  },
+  {
+    id: 'cost',
+    q: 'How much do classes cost?',
+    a: paidPlans + ' We confirm the exact price for your child’s subjects in writing before you pay anything.',
+  },
+  {
+    id: 'class-size',
+    q: 'Are classes 1-on-1 or in groups?',
+    a: 'Both. You choose for each child: 1-on-1 lessons paced entirely around them, or small groups with children at a similar level.',
+  },
+  {
+    id: 'teachers-safety',
+    q: 'Who are the teachers, and are classes safe?',
+    a: 'Every teacher is vetted for subject expertise and experience teaching children online. Classes run in supervised virtual classrooms with clear safeguarding standards, and we recommend an adult stays nearby during lessons for younger children.',
+  },
+  {
+    id: 'equipment',
+    q: 'What does my child need to join a class?',
+    a: 'A laptop or tablet with a camera and microphone, a stable internet connection and a quiet place to sit. Headphones help a lot. We send everything else you need before the first class.',
+    link: { label: 'Tips for a home learning space', href: '/blog/home-learning-space' },
+  },
+  {
+    id: 'outside-nigeria',
+    q: 'We live outside Nigeria. Can we still join?',
+    a: 'Yes. Families join from many time zones. Tell us your time zone and the days and times that suit you, and we match your child with a teacher who can teach then.',
+  },
+  {
+    id: 'siblings',
+    q: 'Can I register more than one child?',
+    a: 'Yes. One form covers the whole family, with up to ' + MAX_CHILDREN + ' children. Each child gets their own subjects, schedule and teacher.',
+  },
+  {
+    id: 'progress',
+    q: 'How will I know how my child is doing?',
+    a: 'You get regular progress updates and a direct line to your child’s teacher. Monthly plans also include written progress reports.',
+  },
+  {
+    id: 'cancel',
+    q: 'Can I change or cancel a plan?',
+    a: 'After the free trial you are under no obligation. For paid plans, the rescheduling and cancellation terms are set out in the written confirmation you receive before paying.',
+    link: { label: 'Read our terms', href: '/terms' },
+  },
+  {
+    id: 'teachers-apply',
+    q: 'I’m a teacher. How can I join Likulearn?',
+    a: 'We are always looking for qualified Science, Commercial and Arts teachers. Email us with your subjects and experience, and we’ll be in touch.',
+    link: { label: 'Apply to teach', href: '/teach' },
+  },
+];
+
+/** The FAQs with these ids, in the order given. */
+export const faqsById = (...ids: string[]) =>
+  ids.map((id) => faqs.find((f) => f.id === id)).filter((f): f is Faq => !!f);

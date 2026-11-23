@@ -1,0 +1,53 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { home } from '../data/content';
+
+const email = home.contact_email;
+const mailto = 'mailto:' + email;
+---
+<LegalPage
+  title="Terms & Conditions"
+  description="The terms that apply when you use likulearn.com and book classes for your children."
+  path="/terms"
+  updated="2026-10-26"
+>
+  <h2>About these terms</h2>
+  <p>These terms apply when you use likulearn.com and when you book classes with Likulearn. By registering, you agree to them. If you have any question, email <a href={mailto}>{email}</a>.</p>
+
+  <h2>Who can register</h2>
+  <p>Classes are for children aged 3 to 18. Registrations must be made by a parent or legal guardian aged 18 or over, who is responsible for the information they give us and for their child's use of our classes.</p>
+
+  <h2>Free trial</h2>
+  <p>Each new learner can take one free trial class of 45 minutes. After you register, our team reviews your request, matches each child with a teacher and contacts you to arrange a time. There is no obligation to continue after the trial.</p>
+
+  <h2>Plans and payment</h2>
+  <p>Prices shown on this website are starting prices in Nigerian naira. Before you pay, we will confirm in writing the exact price, what is included and how to pay for your chosen plan. You only pay once you have agreed to that confirmation.</p>
+  <p>Rescheduling, cancellation and refund terms for paid plans are set out in that written confirmation and form part of these terms.</p>
+
+  <h2>Classes and safeguarding</h2>
+  <ul>
+    <li>Classes take place live online. You are responsible for a suitable device, internet connection and a quiet place to learn.</li>
+    <li>Younger children should have an adult nearby during lessons.</li>
+    <li>Everyone in a class, including learners, parents and teachers, must behave respectfully. We may end a class or a booking if this is not respected.</li>
+    <li>Please do not record lessons without the agreement of the teacher and, for group classes, the other families.</li>
+    <li>If you have any concern about a child's safety or wellbeing, contact us straight away.</li>
+  </ul>
+
+  <h2>Teachers and results</h2>
+  <p>Our teachers are vetted for subject knowledge and experience teaching children online. Every child learns differently, so while we work hard to help each child progress, we cannot guarantee particular grades or exam results.</p>
+
+  <h2>Lesson materials</h2>
+  <p>Notes, worksheets and other materials we provide are for your family's personal use. Please do not share or sell them without our permission.</p>
+
+  <h2>Our responsibility</h2>
+  <p>We provide our services with reasonable care and skill. To the extent permitted by law, we are not responsible for losses that were not foreseeable, or that are caused by events outside our reasonable control, such as internet outages. Nothing in these terms limits any rights you have by law.</p>
+
+  <h2>Privacy</h2>
+  <p>Our <a href="/privacy">Privacy Policy</a> explains how we handle the information you give us about you and your children.</p>
+
+  <h2>Changes to these terms</h2>
+  <p>We may update these terms from time to time. The version on this page, with the date at the top, is the one that applies to new bookings.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of the Federal Republic of Nigeria.</p>
+</LegalPage>

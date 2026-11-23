@@ -1,0 +1,130 @@
+---
+import Rich from './Rich.astro';
+import type { Faq } from '../data/content';
+
+interface Props {
+  title?: string | null;
+  intro?: string | null;
+  email?: string | null;
+  faqs: Faq[];
+}
+const { title, intro, email, faqs } = Astro.props;
+---
+<section id="faq" class="section faq">
+  <div class="faq-side" data-reveal>
+    {title && <h2 class="section-title tight"><Rich text={title} /></h2>}
+    {intro && <p class="section-lead">{intro}</p>}
+    {email && <a href={'mailto:' + email} class="btn btn-green">Ask a question<svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" /></svg></a>}
+  </div>
+  <div class="faq-list">
+    {faqs.map((f, i) => (
+      <details class="faq-item" data-reveal open={i === 0}>
+        <summary>
+          <span class="faq-q">{f.q}</span>
+          <span class="faq-icon" aria-hidden="true"></span>
+        </summary>
+        <div class="faq-a">
+          <div class="faq-a-inner">
+            <p>{f.a}</p>
+            {f.link && <a href={f.link.href} class="faq-link">{f.link.label} <span aria-hidden="true">→</span></a>}
+          </div>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<script>
+  import { animate, motionOn, snap, easeOut } from '../scripts/motion';
+
+  // Native <details> works without JavaScript; with motion on, answers spring open and ease shut.
+  if (motionOn()) {
+    document.querySelectorAll<HTMLDetailsElement>('.faq-item').forEach((item) => {
+      const summary = item.querySelector('summary')!;
+      const panel = item.querySelector<HTMLElement>('.faq-a')!;
+      let running: ReturnType<typeof animate> | null = null;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+        // A closed <details> can still report its content height, so closed means 0.
+        const from = item.open ? panel.offsetHeight : 0;
+        running?.stop();
+        if (!item.open || item.classList.contains('closing')) {
+          item.classList.remove('closing');
+          // Pin the height first so the panel never flashes open at full size.
+          panel.style.height = from + 'px';
+          item.open = true;
+          const to = panel.scrollHeight;
+          running = animate(panel, { height: [from + 'px', to + 'px'], opacity: [0, 1] }, { ...snap, opacity: { duration: 0.25, ease: easeOut } });
+          running.then(() => { panel.style.height = ''; });
+        } else {
+          item.classList.add('closing');
+          running = animate(panel, { height: [from + 'px', '0px'], opacity: 0 }, { duration: 0.25, ease: easeOut });
+          running.then(() => {
+            item.classList.remove('closing');
+            item.open = false;
+            panel.style.height = '';
+            panel.style.opacity = '';
+          });
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .faq {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start;
+  }
+  .faq-side { position: sticky; top: 110px; }
+  .faq-side .section-title, .faq-side .section-lead { text-align: left; margin-left: 0; }
+  .faq-side .section-lead { margin-bottom: 28px; }
+
+  .faq-list { display: flex; flex-direction: column; gap: 12px; }
+  .faq-item {
+    border: 1.5px solid var(--line-warm); border-radius: 16px; background: #fff;
+    transition: border-color 250ms ease, box-shadow 300ms var(--ease-out), background 300ms ease;
+  }
+  .faq-item:hover { border-color: #E2D8CF; }
+  .faq-item[open]:not(.closing) { border-color: var(--green); box-shadow: 0 16px 36px -24px rgba(14,59,54,.55); }
+
+  summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 20px; border-radius: 16px; font-weight: 500; font-size: 16px; line-height: 1.4; color: var(--ink);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline-offset: -2px; }
+
+  /* Plus that turns into a minus. */
+  .faq-icon {
+    position: relative; width: 32px; height: 32px; flex: none; border-radius: 50%; background: var(--cream);
+    transition: background 250ms ease, transform 350ms var(--ease-spring);
+  }
+  .faq-icon::before, .faq-icon::after {
+    content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; border-radius: 2px;
+    background: var(--orange); transform: translate(-50%, -50%); transition: transform 350ms var(--ease-spring), background 250ms ease;
+  }
+  .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+  .faq-item:hover .faq-icon { transform: scale(1.06); }
+  .faq-item[open]:not(.closing) .faq-icon { background: var(--orange); transform: rotate(180deg); }
+  .faq-item[open]:not(.closing) .faq-icon::before,
+  .faq-item[open]:not(.closing) .faq-icon::after { background: #fff; }
+  .faq-item[open]:not(.closing) .faq-icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+
+  .faq-a { overflow: hidden; }
+  .faq-a-inner { padding: 0 20px 20px; }
+  .faq-a p { margin: 0; font-size: 15px; line-height: 1.7; color: var(--muted); max-width: 62ch; }
+  .faq-link { display: inline-block; margin-top: 12px; font-size: 14px; font-weight: 500; }
+  .faq-link span { display: inline-block; transition: transform 250ms var(--ease-out); }
+  .faq-link:hover span { transform: translateX(3px); }
+
+  @media (max-width: 900px) {
+    .faq { grid-template-columns: 1fr; gap: 32px; }
+    .faq-side { position: static; text-align: center; }
+    .faq-side .section-title, .faq-side .section-lead { text-align: center; margin-left: auto; }
+  }
+  @media (max-width: 720px) {
+    summary { padding: 16px; font-size: 15px; }
+    .faq-a-inner { padding: 0 16px 18px; }
+  }
+</style>

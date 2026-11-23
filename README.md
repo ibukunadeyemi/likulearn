@@ -30,8 +30,8 @@ In headings, wrap a word in `*asterisks*` to colour it; `\n` starts a new line.
 On every registration (each step is skipped if its setting is missing; failures are logged
 and never lose the registration, which is already saved):
 
-1. **Parent confirmation email** — summary of what they registered and what happens next.
-2. **Team alert email** to `TEAM_EMAIL` — full details; reply goes straight to the parent.
+1. **Parent confirmation email**: summary of what they registered and what happens next.
+2. **Team alert email** to `TEAM_EMAIL`: full details; reply goes straight to the parent.
 3. **Webhook** to `AUTOMATION_WEBHOOK_URL` (Make / Zapier / n8n "custom webhook"):
 
 ```json

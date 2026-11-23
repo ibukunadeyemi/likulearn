@@ -1,10 +1,11 @@
 import { CLASS_TYPES, TIMES, DAYS, TIMEZONES, AGES, TEACHER_PREFS, MAX_CHILDREN } from '../data/form-options';
 import type { Plan, SubjectGroup } from '../data/content';
+import { animate, stagger, motionOn, settle, easeOut } from './motion';
 
-// Registrations are saved to the "Registrations" collection in the CMS (src/pages/api/enrol.ts).
+// Registrations are saved to the registrations table in D1 (src/pages/api/enrol.ts).
 const ENROL_ENDPOINT = '/api/enrol';
 
-// Plans and subjects are edited in the CMS; the page passes them in (see initEnrolForm).
+// Plans and subjects are edited in src/data/content.ts; the page passes them in (see initEnrolForm).
 let PLANS: Plan[] = [];
 let SUBJECTS: SubjectGroup[] = [];
 
@@ -110,7 +111,6 @@ const initial = (): State => ({
 });
 const toggle = (arr: string[], v: string) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
 const fid = (key: string) => 'f-' + key.replace(/\./g, '-');
-const motionOn = () => document.documentElement.classList.contains('js-motion');
 
 /* ---------------- validation ---------------- */
 
@@ -161,7 +161,7 @@ function loadDraft(): State | null {
       step,
       maxStep: Math.min(Math.max(Number(d.maxStep) || step, step), STEPS.length - 1),
       parent: { ...base.parent, ...d.parent },
-      // Drop subjects that have since been renamed or removed in the CMS.
+      // Drop subjects that have since been renamed or removed in content.ts.
       kids: d.kids.slice(0, MAX_CHILDREN).map((k: Partial<Kid>) => {
         const kid = { ...newKid(), ...k };
         const known = SUBJECTS.flatMap((g) => g.items);
@@ -352,7 +352,7 @@ export function initEnrolForm(
         <div class="rb-head"><h4>Plan: ${esc(planTitle)}</h4>${edit(2, 'plan')}</div>
         <p class="sub">Every child starts with a free trial class.</p>
       </section>
-      <p class="consent">By submitting, you agree that Likulearn may contact you about your trial by email or WhatsApp.</p>
+      <p class="consent">By submitting, you agree that Likulearn may contact you about your trial by email, and that we handle your details as set out in our <a href="/privacy" target="_blank">Privacy Policy</a>.</p>
     </div>`;
   }
 
@@ -409,6 +409,11 @@ export function initEnrolForm(
 
     if (state.submitted) {
       root.innerHTML = renderDone();
+      if (motionOn()) {
+        const [check, ...rest] = root.querySelectorAll<HTMLElement>('.enrol-done > *');
+        animate(check, { opacity: [0, 1], transform: ['scale(0.4)', 'scale(1)'] }, { type: 'spring', visualDuration: 0.5, bounce: 0.45, opacity: { duration: 0.2 } });
+        animate(rest, { opacity: [0, 1], transform: ['translateY(18px)', 'translateY(0px)'] }, { ...settle, delay: stagger(0.08, { startDelay: 0.2 }), opacity: { duration: 0.45, ease: easeOut, delay: stagger(0.08, { startDelay: 0.2 }) } });
+      }
       root.querySelector<HTMLElement>('.done-title')?.focus({ preventScroll: true });
       clearTimeout(saveTimer);
       saveDraft(state); // clears the stored draft
@@ -427,7 +432,7 @@ export function initEnrolForm(
           <button type="button" class="link" data-action="start-over">Start over</button>
           <button type="button" class="icon-x" data-action="dismiss-restore" aria-label="Dismiss">${ICON.close}</button>
         </div>` : ''}
-        <div class="step-panel${o.dir ? ` enter-${o.dir}` : ''}">
+        <div class="step-panel">
           <div class="step-head">
             <p class="step-count">Step ${state.step + 1} of ${STEPS.length}</p>
             <h3 class="step-title" tabindex="-1">${s.title}</h3>
@@ -447,6 +452,12 @@ export function initEnrolForm(
       </form>`;
 
     if (o.pop) root.querySelector(o.pop)?.classList.add('just-toggled');
+
+    // Slide the new step in from the side it came from.
+    const panel = root.querySelector<HTMLElement>('.step-panel');
+    if (o.dir && panel && motionOn()) {
+      animate(panel, { opacity: [0, 1], transform: [`translateX(${o.dir === 'next' ? 32 : -32}px)`, 'translateX(0px)'] }, { ...settle, opacity: { duration: 0.35, ease: easeOut } });
+    }
 
     if (o.scroll) {
       const top = card.getBoundingClientRect().top;

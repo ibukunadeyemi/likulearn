@@ -30,7 +30,7 @@ const { title, intro, plans, subjects } = Astro.props;
     </div>
     <p id="enrol-status" class="sr-only" aria-live="polite"></p>
   </div>
-  <!-- Plans and subjects from the CMS, for the form script. -->
+  <!-- Plans and subjects from content.ts, for the form script. -->
   <script type="application/json" id="enrol-options" set:html={JSON.stringify({ plans, subjects }).replace(/</g, '\\u003c')} />
 </section>
 
